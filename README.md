@@ -11,7 +11,6 @@ An open-source e-commerce platform built with JavaFX, providing a user-friendly 
 - [Installation](#installation)
 - [Usage](#usage)
 - [Technologies Used](#technologies-used)
-- [Contributing](#contributing)
 - [License](#license)
 
 ---
