@@ -33,7 +33,7 @@ An open-source e-commerce platform built with JavaFX, providing a user-friendly 
     git clone https://github.com/KaisAbiyyi/ecommerce-java.git
     ```
 2. **Navigate to the project directory:**
-    ``bash
+    ```bash
     cd ecommerce-java
     ```
 3. **Build and run the application using Maven:**
