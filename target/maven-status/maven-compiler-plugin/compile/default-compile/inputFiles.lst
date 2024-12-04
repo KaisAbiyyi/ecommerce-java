@@ -2,6 +2,7 @@ D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\shared\BaseContr
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\seller\model\Seller.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\shared\ValidationUtils.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\customer\CustomerController.java
+D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\models\User.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\seller\ManageOrdersController.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\customer\model\Customer.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\config\DatabaseConfig.java
@@ -11,6 +12,7 @@ D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\customer\Product
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\admin\AdminController.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\shared\LoginController.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\admin\model\Admin.java
+D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\dao\UserDAO.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\seller\ManageProductsController.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\customer\CartController.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\seller\SellerController.java
@@ -19,3 +21,4 @@ D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\admin\ManageUser
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\shared\AlertUtils.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\customer\CheckoutController.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\admin\ManageApplicationController.java
+D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\utils\PasswordUtils.java

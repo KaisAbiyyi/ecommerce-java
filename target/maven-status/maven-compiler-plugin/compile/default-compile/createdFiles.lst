@@ -1,4 +1,3 @@
-com\ecommerce\admin\model\Admin.class
 com\ecommerce\utils\DatabaseUtils.class
 com\ecommerce\config\DatabaseConfig.class
 com\ecommerce\shared\BaseController.class
@@ -6,8 +5,12 @@ com\ecommerce\shared\LoginController.class
 com\ecommerce\customer\model\Customer.class
 com\ecommerce\seller\ManageOrdersController.class
 com\ecommerce\shared\ValidationUtils.class
-com\ecommerce\App.class
 com\ecommerce\admin\AdminController.class
+com\ecommerce\dao\UserDAO.class
 module-info.class
 com\ecommerce\shared\AlertUtils.class
 com\ecommerce\admin\ManageUsersController.class
+com\ecommerce\utils\PasswordUtils.class
+com\ecommerce\admin\model\Admin.class
+com\ecommerce\models\User.class
+com\ecommerce\App.class
