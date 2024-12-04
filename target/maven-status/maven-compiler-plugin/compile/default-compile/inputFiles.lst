@@ -4,6 +4,7 @@ D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\shared\Validatio
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\customer\CustomerController.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\seller\ManageOrdersController.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\customer\model\Customer.java
+D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\config\DatabaseConfig.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\App.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\utils\DatabaseUtils.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\customer\ProductController.java
