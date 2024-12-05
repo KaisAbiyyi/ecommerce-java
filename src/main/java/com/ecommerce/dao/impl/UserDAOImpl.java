@@ -1,61 +1,64 @@
 package com.ecommerce.dao.impl;
 
-import com.ecommerce.dao.UserDAO;
-import com.ecommerce.models.User;
-import com.ecommerce.utils.DatabaseUtils;
-import com.ecommerce.utils.PasswordUtils;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDAOImpl implements UserDAO {
+import com.ecommerce.dao.UserDAO;
+import com.ecommerce.models.User;
+import com.ecommerce.models.User.Role;
 
-    private static final String INSERT_USER = "INSERT INTO users (username, email, password, role, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)";
-    private static final String SELECT_USER_BY_ID = "SELECT * FROM users WHERE id = ?";
-    private static final String SELECT_ALL_USERS = "SELECT * FROM users";
-    private static final String UPDATE_USER = "UPDATE users SET username = ?, email = ?, password = ?, role = ?, updated_at = ? WHERE id = ?";
-    private static final String DELETE_USER = "DELETE FROM users WHERE id = ?";
+public class UserDAOImpl implements UserDAO {
+    private final Connection connection;
+
+    // Konstruktor untuk menerima koneksi database
+    public UserDAOImpl(Connection connection) {
+        this.connection = connection;
+    }
 
     @Override
     public void addUser(User user) {
-        try (Connection connection = DatabaseUtils.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USER)) {
-
+        String sql = "INSERT INTO users (username, email, password, role, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, user.getUsername());
             preparedStatement.setString(2, user.getEmail());
-            preparedStatement.setString(3, PasswordUtils.encrypt(user.getPassword()));
-            preparedStatement.setString(4, user.getRole().toString());
+            preparedStatement.setString(3, user.getPassword());
+            preparedStatement.setString(4, user.getRole().name());
             preparedStatement.setTimestamp(5, Timestamp.valueOf(user.getCreatedAt()));
             preparedStatement.setTimestamp(6, Timestamp.valueOf(user.getUpdatedAt()));
-
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new RuntimeException("Error inserting user: " + e.getMessage());
         }
     }
 
     @Override
     public User getUserById(int id) {
-        User user = null;
-        try (Connection connection = DatabaseUtils.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_BY_ID)) {
-
+        String sql = "SELECT * FROM users WHERE id = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
-
             if (resultSet.next()) {
-                user = extractUserFromResultSet(resultSet);
+                return extractUserFromResultSet(resultSet);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return user;
+        return null;
     }
 
     @Override
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
-        try (Connection connection = DatabaseUtils.getConnection(); Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery(SELECT_ALL_USERS)) {
-
+        String sql = "SELECT * FROM users";
+        try (Statement statement = connection.createStatement()) {
+            ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
                 users.add(extractUserFromResultSet(resultSet));
             }
@@ -67,15 +70,14 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public void updateUser(User user) {
-        try (Connection connection = DatabaseUtils.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_USER)) {
-
+        String sql = "UPDATE users SET username = ?, email = ?, password = ?, role = ?, updated_at = ? WHERE id = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, user.getUsername());
             preparedStatement.setString(2, user.getEmail());
-            preparedStatement.setString(3, PasswordUtils.encrypt(user.getPassword()));
-            preparedStatement.setString(4, user.getRole().toString());
+            preparedStatement.setString(3, user.getPassword());
+            preparedStatement.setString(4, user.getRole().name());
             preparedStatement.setTimestamp(5, Timestamp.valueOf(user.getUpdatedAt()));
             preparedStatement.setInt(6, user.getId());
-
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -84,8 +86,8 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public void deleteUser(int id) {
-        try (Connection connection = DatabaseUtils.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USER)) {
-
+        String sql = "DELETE FROM users WHERE id = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -93,17 +95,15 @@ public class UserDAOImpl implements UserDAO {
         }
     }
 
-    // Helper method to extract User object from ResultSet
     private User extractUserFromResultSet(ResultSet resultSet) throws SQLException {
         User user = new User();
         user.setId(resultSet.getInt("id"));
         user.setUsername(resultSet.getString("username"));
         user.setEmail(resultSet.getString("email"));
-        user.setPassword(resultSet.getString("password")); // Stored as hashed password
-        user.setRole(User.Role.fromString(resultSet.getString("role")));
+        user.setPassword(resultSet.getString("password")); // Disimpan sebagai hashed password
+        user.setRole(Role.fromString(resultSet.getString("role")));
         user.setCreatedAt(resultSet.getTimestamp("created_at").toLocalDateTime());
         user.setUpdatedAt(resultSet.getTimestamp("updated_at").toLocalDateTime());
-
         return user;
     }
 }

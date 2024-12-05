@@ -1,0 +1,5 @@
+package com.ecommerce.dao.impl;
+
+public class OrderDetailDAOImpl {
+    
+}

@@ -1,4 +1,0 @@
---patch-module
-com.ecommerce=_
---add-reads
-com.ecommerce=ALL-UNNAMED

@@ -9,8 +9,8 @@ public class User {
     private int id;
     private String username;
     private String email;
-    private String password; // Disimpan dalam bentuk hashed
-    private Role role; // Menggunakan enum untuk role
+    private String password; // Password yang disimpan dalam bentuk hash
+    private Role role;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -68,11 +68,11 @@ public class User {
     }
 
     public String getPassword() {
-        throw new UnsupportedOperationException("Direct access to password is not allowed.");
+        return password; // Mengembalikan password hash
     }
 
     public void setPassword(String password) {
-        if (!PasswordUtils.isHashed(password)) { // Tambahkan logika untuk memeriksa apakah password sudah di-hash
+        if (!PasswordUtils.isHashed(password)) { // Periksa apakah password sudah di-hash
             this.password = PasswordUtils.encrypt(password);
         } else {
             this.password = password;
