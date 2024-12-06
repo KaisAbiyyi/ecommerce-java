@@ -1,20 +1,19 @@
 package com.ecommerce.models;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
-public class Order {
-    private int id; // ID unik untuk pesanan
-    private int userId; // ID pengguna yang membuat pesanan
-    private BigDecimal totalPrice; // Total harga pesanan
-    private Status status; // Status pesanan (enum: PENDING, PAID, COMPLETED)
-    private LocalDateTime createdAt; // Waktu pesanan dibuat
-    private LocalDateTime updatedAt; // Waktu pesanan terakhir diperbarui
+public class OrderSeller {
 
-    // Enum untuk status pesanan
+    private int id; // ID unik untuk sub-pesanan (per seller)
+    private int orderId; // ID pesanan utama (referensi ke tabel orders)
+    private int sellerId; // ID penjual (referensi ke tabel users dengan role SELLER)
+    private Status status; // Status sub-pesanan (enum: PENDING, SHIPPED, COMPLETED)
+    private LocalDateTime createdAt; // Waktu sub-pesanan dibuat
+    private LocalDateTime updatedAt; // Waktu sub-pesanan terakhir diperbarui
+
+    // Enum untuk status sub-pesanan
     public enum Status {
-        PENDING, PAID, COMPLETED;
+        PENDING, SHIPPED, COMPLETED;
 
         public static Status fromString(String statusString) {
             for (Status status : Status.values()) {
@@ -27,13 +26,13 @@ public class Order {
     }
 
     // Constructor kosong
-    public Order() {}
+    public OrderSeller() {}
 
     // Constructor penuh
-    public Order(int id, int userId, BigDecimal totalPrice, Status status, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public OrderSeller(int id, int orderId, int sellerId, Status status, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
-        this.userId = userId;
-        this.totalPrice = totalPrice;
+        this.orderId = orderId;
+        this.sellerId = sellerId;
         this.status = status;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -48,20 +47,20 @@ public class Order {
         this.id = id;
     }
 
-    public int getUserId() {
-        return userId;
+    public int getOrderId() {
+        return orderId;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
     }
 
-    public BigDecimal getTotalPrice() {
-        return totalPrice;
+    public int getSellerId() {
+        return sellerId;
     }
 
-    public void setTotalPrice(BigDecimal totalPrice) {
-        this.totalPrice = totalPrice;
+    public void setSellerId(int sellerId) {
+        this.sellerId = sellerId;
     }
 
     public Status getStatus() {
@@ -91,10 +90,10 @@ public class Order {
     // toString() untuk debugging dan logging
     @Override
     public String toString() {
-        return "Order{" +
+        return "OrderSeller{" +
                 "id=" + id +
-                ", userId=" + userId +
-                ", totalPrice=" + totalPrice +
+                ", orderId=" + orderId +
+                ", sellerId=" + sellerId +
                 ", status=" + status +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +

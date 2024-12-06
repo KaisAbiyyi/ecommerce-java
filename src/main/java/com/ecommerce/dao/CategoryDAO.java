@@ -22,6 +22,14 @@ public interface CategoryDAO {
     Category getCategoryById(int id);
 
     /**
+     * Mengambil kategori berdasarkan nama.
+     *
+     * @param name Nama kategori.
+     * @return Objek kategori, atau null jika tidak ditemukan.
+     */
+    Category getCategoryByName(String name);
+
+    /**
      * Mengambil semua kategori dari database.
      *
      * @return Daftar kategori.
@@ -43,10 +51,10 @@ public interface CategoryDAO {
     void deleteCategory(int id);
 
     /**
-     * Mencari kategori berdasarkan nama.
+     * Mencari kategori berdasarkan nama atau kata kunci.
      *
-     * @param name Nama kategori atau kata kunci.
-     * @return Daftar kategori yang cocok dengan nama.
+     * @param name Kata kunci pencarian kategori.
+     * @return Daftar kategori yang cocok dengan kata kunci.
      */
     List<Category> searchCategoryByName(String name);
 }

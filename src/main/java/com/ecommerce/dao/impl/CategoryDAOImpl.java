@@ -49,6 +49,22 @@ public class CategoryDAOImpl implements CategoryDAO {
     }
 
     @Override
+    public Category getCategoryByName(String name) {
+        String sql = "SELECT * FROM categories WHERE name = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, name);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return extractCategoryFromResultSet(resultSet);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error fetching category by name: " + name, e);
+        }
+        return null; // Jika kategori tidak ditemukan
+    }
+
+    @Override
     public List<Category> getAllCategories() {
         List<Category> categories = new ArrayList<>();
         String sql = "SELECT * FROM categories";

@@ -1,14 +1,11 @@
 package com.ecommerce.test;
 
-import com.ecommerce.utils.DatabaseUtils;
-import com.ecommerce.dao.impl.CategoryDAOImpl;
-import com.ecommerce.dao.impl.ProductDAOImpl;
-import com.ecommerce.dao.impl.UserDAOImpl;
-import com.ecommerce.models.Category;
-import com.ecommerce.models.Product;
-import com.ecommerce.models.User;
+import com.ecommerce.dao.impl.*;
+import com.ecommerce.models.*;
 import com.ecommerce.models.User.Role;
+import com.ecommerce.utils.DatabaseUtils;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,75 +14,107 @@ public class DBTest {
 
     public static void main(String[] args) {
         try (Connection connection = DatabaseUtils.getConnection()) {
-            // DAO instances
+            // DAO Instances
             CategoryDAOImpl categoryDAO = new CategoryDAOImpl(connection);
-            ProductDAOImpl productDAO = new ProductDAOImpl(connection);
             UserDAOImpl userDAO = new UserDAOImpl(connection);
+            ProductDAOImpl productDAO = new ProductDAOImpl(connection);
+            OrderDAOImpl orderDAO = new OrderDAOImpl(connection);
+            OrderSellerDAOImpl orderSellerDAO = new OrderSellerDAOImpl(connection);
+            OrderItemDAOImpl orderItemDAO = new OrderItemDAOImpl(connection);
 
             // 1. Insert Categories
             System.out.println("=== INSERT CATEGORIES ===");
-            Category category1 = new Category(0, "Electronics", LocalDateTime.now(), LocalDateTime.now());
-            Category category2 = new Category(0, "Books", LocalDateTime.now(), LocalDateTime.now());
-            Category category3 = new Category(0, "Clothing", LocalDateTime.now(), LocalDateTime.now());
+            categoryDAO.addCategory(new Category(0, "Electronics", LocalDateTime.now(), LocalDateTime.now()));
+            categoryDAO.addCategory(new Category(0, "Books", LocalDateTime.now(), LocalDateTime.now()));
 
-            categoryDAO.addCategory(category1);
-            categoryDAO.addCategory(category2);
-            categoryDAO.addCategory(category3);
+            // Retrieve Categories
+            Category electronics = categoryDAO.searchCategoryByName("Electronics").stream().findFirst().orElseThrow();
+            Category books = categoryDAO.searchCategoryByName("Books").stream().findFirst().orElseThrow();
             System.out.println("Categories inserted successfully.");
 
-            // 2. Retrieve All Categories
-            System.out.println("\n=== RETRIEVE ALL CATEGORIES ===");
-            List<Category> categories = categoryDAO.getAllCategories();
-            categories.forEach(System.out::println);
+            // 2. Insert Users
+            System.out.println("\n=== INSERT USERS ===");
+            userDAO.addUser(new User(0, "seller1", "seller1@example.com", "password123", Role.SELLER, LocalDateTime.now(), LocalDateTime.now()));
+            userDAO.addUser(new User(0, "customer1", "customer1@example.com", "password123", Role.CUSTOMER, LocalDateTime.now(), LocalDateTime.now()));
 
-            // 3. Create a User as a Seller
-            System.out.println("\n=== CREATE SELLER USER ===");
-            User seller = new User(0, "selleruser", "seller@example.com", "sellerpass123", Role.SELLER, LocalDateTime.now(), LocalDateTime.now());
-            userDAO.addUser(seller);
-            System.out.println("Seller user created successfully.");
+            // Retrieve Users
+            User seller = userDAO.getAllUsers().stream().filter(u -> u.getRole() == Role.SELLER).findFirst().orElseThrow();
+            User customer = userDAO.getAllUsers().stream().filter(u -> u.getRole() == Role.CUSTOMER).findFirst().orElseThrow();
+            System.out.println("Users inserted successfully.");
 
-            // Retrieve the newly created seller to get the ID
-            seller = userDAO.getAllUsers().stream()
-                    .filter(user -> user.getUsername().equals("selleruser"))
-                    .findFirst()
-                    .orElseThrow(() -> new RuntimeException("Seller user not found"));
-
-            // 4. Insert Products
+            // 3. Insert Products
             System.out.println("\n=== INSERT PRODUCTS ===");
-            Product product1 = new Product(0, "Smartphone", "Latest model smartphone", 699.99, 100, seller.getId(), categories.get(0).getId(), "smartphone.jpg", LocalDateTime.now(), LocalDateTime.now());
-            Product product2 = new Product(0, "Laptop", "High performance laptop", 1299.99, 50, seller.getId(), categories.get(0).getId(), "laptop.jpg", LocalDateTime.now(), LocalDateTime.now());
-            Product product3 = new Product(0, "Novel", "Bestselling novel", 19.99, 200, seller.getId(), categories.get(1).getId(), "novel.jpg", LocalDateTime.now(), LocalDateTime.now());
-            Product product4 = new Product(0, "T-Shirt", "Comfortable cotton t-shirt", 9.99, 300, seller.getId(), categories.get(2).getId(), "tshirt.jpg", LocalDateTime.now(), LocalDateTime.now());
-            Product product5 = new Product(0, "Jeans", "Stylish denim jeans", 49.99, 150, seller.getId(), categories.get(2).getId(), "jeans.jpg", LocalDateTime.now(), LocalDateTime.now());
+            productDAO.addProduct(new Product(
+                    0, "Smartphone", "High-end smartphone", 999.99, 50,
+                    seller.getId(), electronics.getId(), "phone.jpg",
+                    LocalDateTime.now(), LocalDateTime.now()
+            ));
 
-            productDAO.addProduct(product1);
-            productDAO.addProduct(product2);
-            productDAO.addProduct(product3);
-            productDAO.addProduct(product4);
-            productDAO.addProduct(product5);
+            productDAO.addProduct(new Product(
+                    0, "Laptop", "Gaming laptop", 1599.99, 30,
+                    seller.getId(), electronics.getId(), "laptop.jpg",
+                    LocalDateTime.now(), LocalDateTime.now()
+            ));
+
+            productDAO.addProduct(new Product(
+                    0, "Novel", "Bestselling novel", 19.99, 200,
+                    seller.getId(), books.getId(), "novel.jpg",
+                    LocalDateTime.now(), LocalDateTime.now()
+            ));
             System.out.println("Products inserted successfully.");
 
-            // 5. Retrieve All Products
-            System.out.println("\n=== RETRIEVE ALL PRODUCTS ===");
+            // Retrieve Products
             List<Product> products = productDAO.getAllProducts();
             products.forEach(System.out::println);
 
-            // 6. Update a Product
-            System.out.println("\n=== UPDATE PRODUCT ===");
-            Product existingProduct = products.get(0); // Assuming we take the first product
-            existingProduct.setPrice(749.99); // Update price
-            productDAO.updateProduct(existingProduct);
-            System.out.println("Product updated successfully.");
+            // 4. Create Order
+            System.out.println("\n=== CREATE ORDER ===");
+            Order order = new Order(
+                    0, // ID
+                    customer.getId(), // ID pengguna
+                    new BigDecimal("2599.97"), // Total harga
+                    Order.Status.PENDING, // Status pesanan
+                    LocalDateTime.now(), // Waktu pembuatan
+                    LocalDateTime.now() // Waktu pembaruan
+            );
 
-            // 7. Delete a Product
-            System.out.println("\n=== DELETE PRODUCT ===");
-            productDAO.deleteProduct(products.get(4).getId()); // Delete the fifth product
-            System.out.println("Product deleted successfully.");
+            orderDAO.addOrder(order);
 
-            // 8. Retrieve Products by Category
-            System.out.println("\n=== RETRIEVE PRODUCTS BY CATEGORY ===");
-            List<Product> electronicsProducts = productDAO.getProductsByCategory(categories.get(0).getId());
-            electronicsProducts.forEach(System.out::println);
+            // Retrieve Order
+            order = orderDAO.getAllOrders().stream().findFirst().orElseThrow();
+            System.out.println("Order created successfully.");
+
+            // 5. Create Order Sellers
+            System.out.println("\n=== CREATE ORDER SELLERS ===");
+            OrderSeller orderSeller = new OrderSeller(
+                    0, order.getId(), seller.getId(), OrderSeller.Status.PENDING,
+                    LocalDateTime.now(), LocalDateTime.now()
+            );
+            orderSellerDAO.addOrderSeller(orderSeller);
+
+            // Retrieve Order Sellers
+            List<OrderSeller> orderSellers = orderSellerDAO.getOrderSellersByOrderId(order.getId());
+            orderSellers.forEach(System.out::println);
+
+            // 6. Add Order Items
+            System.out.println("\n=== ADD ORDER ITEMS ===");
+            Product phone = products.stream().filter(p -> p.getName().equals("Smartphone")).findFirst().orElseThrow();
+            Product laptop = products.stream().filter(p -> p.getName().equals("Laptop")).findFirst().orElseThrow();
+
+            orderItemDAO.addOrderItem(new OrderItem(
+                    0, orderSeller.getId(), phone.getId(), 2, phone.getPrice() * 2,
+                    LocalDateTime.now(), LocalDateTime.now()
+            ));
+
+            orderItemDAO.addOrderItem(new OrderItem(
+                    0, orderSeller.getId(), laptop.getId(), 1, laptop.getPrice(),
+                    LocalDateTime.now(), LocalDateTime.now()
+            ));
+            System.out.println("Order items added successfully.");
+
+            // Retrieve Order Items
+            List<OrderItem> orderItems = orderItemDAO.getOrderItemsByOrderSellerId(orderSeller.getId());
+            orderItems.forEach(System.out::println);
 
         } catch (Exception e) {
             e.printStackTrace();
