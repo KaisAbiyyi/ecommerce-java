@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.Button?>
 
-<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1"
-    fx:controller="com.ecommerce.shared.LoginController" spacing="10" alignment="CENTER">
-    <TextField fx:id="usernameField" promptText="Username" />
-    <PasswordField fx:id="passwordField" promptText="Password" />
-    <Button text="Login" fx:id="loginButton" />
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1024.0" prefWidth="1440.0" spacing="10" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ecommerce.shared.LoginController">
+    <TextField fx:id="usernameField" maxWidth="1.7976931348623157E308" prefHeight="50.0" prefWidth="40.0" promptText="Username">
+      <VBox.margin>
+         <Insets bottom="20.0" left="932.0" right="108.0" top="104.0" />
+      </VBox.margin></TextField>
+    <PasswordField fx:id="passwordField" prefHeight="50.0" promptText="Password">
+      <VBox.margin>
+         <Insets left="932.0" right="108.0" />
+      </VBox.margin></PasswordField>
+    <Button fx:id="loginButton" prefHeight="50.0" prefWidth="400.0" text="Login">
+      <VBox.margin>
+         <Insets left="932.0" />
+      </VBox.margin></Button>
 </VBox>
