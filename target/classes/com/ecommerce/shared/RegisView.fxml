@@ -27,12 +27,12 @@
                <children>
                   <VBox>
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Login">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Register">
                            <font>
                               <Font size="48.0" />
                            </font>
                         </Text>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Plese Sign in to Continue">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Plese register to login ">
                            <font>
                               <Font size="18.0" />
                            </font>
@@ -47,12 +47,13 @@
                                  <children>
                                     <TextField fx:id="username" prefHeight="50.0" prefWidth="400.0" promptText="Username" style="-fx-background-radius: 25;" />
                                     <TextField fx:id="password" prefHeight="50.0" prefWidth="400.0" promptText="Password" style="-fx-background-radius: 25;" />
+                                    <TextField fx:id="password1" prefHeight="50.0" prefWidth="400.0" promptText="confirm Password" style="-fx-background-radius: 25;" />
                                  </children>
                               </VBox>
                               <VBox alignment="CENTER" spacing="20.0">
-                                 <children> 
-                                    
-                                    <Button fx:id="sign_in" mnemonicParsing="false" prefHeight="50.0" prefWidth="400.0" style="-fx-background-radius: 25;" text="Sign In" />
+                                 <children>
+                                    <Button fx:id="sign_up" mnemonicParsing="false" prefHeight="50.0" prefWidth="400.0" style="-fx-background-radius: 25;" text="Sign Up" />
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Don’t have account? Sign Up" />
                                     
                                  </children>
                               </VBox>
