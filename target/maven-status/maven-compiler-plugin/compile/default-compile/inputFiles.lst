@@ -44,6 +44,7 @@ D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\dao\impl\Categor
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\dao\OrderItemDAO.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\dao\OrderSellerDAO.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\models\Category.java
+D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\seeder\DatabaseSeeder.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\models\Payment.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\test\DBTest.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\models\Order.java
