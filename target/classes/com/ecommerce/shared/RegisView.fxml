@@ -52,7 +52,7 @@
                               </VBox>
                               <VBox alignment="CENTER" spacing="20.0">
                                  <children>
-                                    <Button fx:id="sign_up" mnemonicParsing="false" prefHeight="50.0" prefWidth="400.0" style="-fx-background-radius: 25;" text="Sign Up" />
+                                    <Button fx:id="sign_up" mnemonicParsing="false" prefHeight="50.0" prefWidth="400.0" style="-fx-background-radius: 25; -fx-background-color: rgba(100, 220, 191, 1);" text="Sign Up" textFill="WHITE" />
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Don’t have account? Sign Up" />
                                     
                                  </children>
