@@ -1,22 +1,20 @@
 package com.ecommerce.dao;
 
 import java.util.List;
-
 import com.ecommerce.models.User;
 
 /**
- * Interface untuk mengelola operasi database yang berhubungan dengan entitas
- * User.
+ * Interface untuk mengelola operasi database yang berhubungan dengan entitas User.
  */
 public interface UserDAO {
 
     /**
      * Menambahkan pengguna baru ke database.
      *
-     * @param user Objek User yang berisi informasi pengguna yang akan
-     * ditambahkan.
+     * @param user Objek User yang berisi informasi pengguna yang akan ditambahkan.
+     * @return true jika berhasil ditambahkan, false jika gagal.
      */
-    void addUser(User user);
+    boolean addUser(User user);
 
     /**
      * Mendapatkan pengguna berdasarkan ID mereka.
@@ -36,27 +34,51 @@ public interface UserDAO {
     /**
      * Memperbarui informasi pengguna yang ada di database.
      *
-     * @param user Objek User yang diperbarui, termasuk ID yang menunjukkan
-     * pengguna yang akan diperbarui.
+     * @param user Objek User yang diperbarui, termasuk ID yang menunjukkan pengguna yang akan diperbarui.
+     * @return true jika update berhasil, false jika gagal.
      */
-    void updateUser(User user);
+    boolean updateUser(User user);
 
     /**
      * Menghapus pengguna dari database berdasarkan ID.
      *
      * @param id ID unik dari pengguna yang akan dihapus.
+     * @return true jika penghapusan berhasil, false jika gagal.
      */
-    void deleteUser(int id);
+    boolean deleteUser(int id);
 
     /**
-     * Mendapatkan pengguna berdasarkan username dan password. Metode ini
-     * digunakan untuk autentikasi saat login.
+     * Mendapatkan pengguna berdasarkan email dan password. 
+     * Metode ini digunakan untuk autentikasi saat login.
      *
-     * @param email Username dari pengguna.
-     * @param password Password dari pengguna (bisa dalam bentuk plaintext atau
-     * hash, tergantung pada implementasi).
-     * @return Objek User jika username dan password cocok, atau null jika tidak
-     * ditemukan.
+     * @param email Email dari pengguna.
+     * @param plainPassword Password dari pengguna (plaintext).
+     * @return Objek User jika email dan password cocok, atau null jika tidak ditemukan.
      */
     User getUserByEmailAndPassword(String email, String plainPassword);
+
+    /**
+     * Mendapatkan pengguna berdasarkan email saja.
+     * Metode ini digunakan untuk memeriksa apakah email sudah terdaftar.
+     *
+     * @param email Email dari pengguna.
+     * @return Objek User jika email ditemukan, atau null jika tidak ada.
+     */
+    User getUserByEmail(String email);
+
+    /**
+     * Mengecek apakah email sudah terdaftar di database.
+     *
+     * @param email Email yang akan diperiksa.
+     * @return true jika email ditemukan, false jika tidak ada.
+     */
+    boolean isEmailRegistered(String email);
+
+    /**
+     * Mendapatkan pengguna berdasarkan token autentikasi (digunakan untuk fitur "tetap login").
+     *
+     * @param token Token autentikasi pengguna.
+     * @return Objek User jika token ditemukan, atau null jika tidak ada.
+     */
+    User getUserByToken(String token);
 }

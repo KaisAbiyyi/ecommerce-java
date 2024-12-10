@@ -107,7 +107,6 @@ public class LoginController {
             Stage stage = (Stage) emailField.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Register");
-            stage.setFullScreen(true); // Tetap fullscreen
         } catch (IOException e) {
             e.printStackTrace();
             showAlert("Error", "Tidak dapat membuka halaman register.");

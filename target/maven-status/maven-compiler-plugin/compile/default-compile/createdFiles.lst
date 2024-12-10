@@ -40,6 +40,7 @@ com\ecommerce\dao\impl\ReviewDAOImpl.class
 com\ecommerce\dao\ProductDAO.class
 com\ecommerce\models\User.class
 com\ecommerce\dao\ReviewDAO.class
+com\ecommerce\shared\RegisterController.class
 com\ecommerce\App.class
 com\ecommerce\customer\ProductController.class
 com\ecommerce\models\Review.class

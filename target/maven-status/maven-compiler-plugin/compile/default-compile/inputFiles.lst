@@ -1,6 +1,7 @@
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\seller\model\Seller.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\models\User.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\seller\ManageOrdersController.java
+D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\shared\RegisterController.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\models\Review.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\admin\model\Admin.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\dao\impl\OrderItemDAOImpl.java

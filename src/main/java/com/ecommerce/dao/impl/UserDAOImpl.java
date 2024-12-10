@@ -22,7 +22,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public void addUser(User user) {
+    public boolean addUser(User user) {
         String sql = "INSERT INTO users (username, email, password, role, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, user.getUsername());
@@ -31,7 +31,8 @@ public class UserDAOImpl implements UserDAO {
             preparedStatement.setString(4, user.getRole().name());
             preparedStatement.setTimestamp(5, Timestamp.valueOf(user.getCreatedAt()));
             preparedStatement.setTimestamp(6, Timestamp.valueOf(user.getUpdatedAt()));
-            preparedStatement.executeUpdate();
+            int rowsInserted = preparedStatement.executeUpdate();
+            return rowsInserted > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Error inserting user: " + e.getMessage());
@@ -71,7 +72,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public void updateUser(User user) {
+    public boolean updateUser(User user) {
         String sql = "UPDATE users SET username = ?, email = ?, password = ?, role = ?, updated_at = ? WHERE id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, user.getUsername());
@@ -80,7 +81,8 @@ public class UserDAOImpl implements UserDAO {
             preparedStatement.setString(4, user.getRole().name());
             preparedStatement.setTimestamp(5, Timestamp.valueOf(user.getUpdatedAt()));
             preparedStatement.setInt(6, user.getId());
-            preparedStatement.executeUpdate();
+            int rowsUpdated = preparedStatement.executeUpdate();
+            return rowsUpdated > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Error updating user: " + e.getMessage());
@@ -88,11 +90,12 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public void deleteUser(int id) {
+    public boolean deleteUser(int id) {
         String sql = "DELETE FROM users WHERE id = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, id);
-            preparedStatement.executeUpdate();
+            int rowsDeleted = preparedStatement.executeUpdate();
+            return rowsDeleted > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Error deleting user: " + e.getMessage());
@@ -122,6 +125,58 @@ public class UserDAOImpl implements UserDAO {
         return null; // Return null jika email tidak ditemukan atau password tidak cocok
     }
 
+    @Override
+    public User getUserByEmail(String email) {
+        String sql = "SELECT * FROM users WHERE email = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, email);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return extractUserFromResultSet(resultSet);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error retrieving user by email: " + e.getMessage());
+        }
+        return null;
+    }
+
+    @Override
+    public boolean isEmailRegistered(String email) {
+        String sql = "SELECT COUNT(*) FROM users WHERE email = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, email);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                int count = resultSet.getInt(1);
+                return count > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error checking email registration: " + e.getMessage());
+        }
+        return false;
+    }
+
+    @Override
+    public User getUserByToken(String token) {
+        String sql = "SELECT * FROM users WHERE token = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, token);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return extractUserFromResultSet(resultSet);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error retrieving user by token: " + e.getMessage());
+        }
+        return null;
+    }
+
+    /**
+     * Metode untuk mengekstrak data pengguna dari ResultSet.
+     */
     private User extractUserFromResultSet(ResultSet resultSet) throws SQLException {
         return new User(
                 resultSet.getInt("id"),
