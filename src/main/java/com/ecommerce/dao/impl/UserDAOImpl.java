@@ -1,18 +1,21 @@
 package com.ecommerce.dao.impl;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.ecommerce.dao.UserDAO;
 import com.ecommerce.models.User;
 import com.ecommerce.models.User.Role;
 
-import java.sql.*;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
 public class UserDAOImpl implements UserDAO {
     private final Connection connection;
 
-    // Konstruktor untuk menerima koneksi database
     public UserDAOImpl(Connection connection) {
         this.connection = connection;
     }
@@ -45,6 +48,7 @@ public class UserDAOImpl implements UserDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new RuntimeException("Error retrieving user by ID: " + e.getMessage());
         }
         return null;
     }
@@ -60,6 +64,7 @@ public class UserDAOImpl implements UserDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new RuntimeException("Error retrieving all users: " + e.getMessage());
         }
         return users;
     }
@@ -77,6 +82,7 @@ public class UserDAOImpl implements UserDAO {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new RuntimeException("Error updating user: " + e.getMessage());
         }
     }
 
@@ -88,18 +94,36 @@ public class UserDAOImpl implements UserDAO {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new RuntimeException("Error deleting user: " + e.getMessage());
         }
     }
 
+    @Override
+    public User getUserByUsernameAndPassword(String username, String password) {
+        String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, password);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return extractUserFromResultSet(resultSet);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error retrieving user by username and password: " + e.getMessage());
+        }
+        return null;
+    }
+
     private User extractUserFromResultSet(ResultSet resultSet) throws SQLException {
-        User user = new User();
-        user.setId(resultSet.getInt("id"));
-        user.setUsername(resultSet.getString("username"));
-        user.setEmail(resultSet.getString("email"));
-        user.setPassword(resultSet.getString("password")); // Disimpan sebagai hashed password
-        user.setRole(Role.fromString(resultSet.getString("role")));
-        user.setCreatedAt(resultSet.getTimestamp("created_at").toLocalDateTime());
-        user.setUpdatedAt(resultSet.getTimestamp("updated_at").toLocalDateTime());
-        return user;
+        return new User(
+            resultSet.getInt("id"),
+            resultSet.getString("username"),
+            resultSet.getString("email"),
+            resultSet.getString("password"),
+            Role.fromString(resultSet.getString("role")),
+            resultSet.getTimestamp("created_at").toLocalDateTime(),
+            resultSet.getTimestamp("updated_at").toLocalDateTime()
+        );
     }
 }
