@@ -20,6 +20,7 @@ com\ecommerce\dao\impl\OrderDAOImpl.class
 com\ecommerce\models\Category.class
 com\ecommerce\customer\CustomerController.class
 com\ecommerce\utils\DatabaseUtils.class
+com\ecommerce\migrations\DatabaseMigrator.class
 com\ecommerce\customer\model\Customer.class
 com\ecommerce\shared\ValidationUtils.class
 com\ecommerce\models\OrderSeller$Status.class
@@ -33,6 +34,7 @@ module-info.class
 com\ecommerce\shared\AlertUtils.class
 com\ecommerce\admin\ManageUsersController.class
 com\ecommerce\customer\CartController.class
+com\ecommerce\migrations\MigrationService.class
 com\ecommerce\dao\impl\ReviewDAOImpl.class
 com\ecommerce\dao\ProductDAO.class
 com\ecommerce\models\User.class
