@@ -16,28 +16,26 @@ public class App extends Application {
         showLoginView();
     }
 
-    // Method untuk menampilkan tampilan login
     public void showLoginView() throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/com/ecommerce/shared/LoginView.fxml"));
         primaryStage.setTitle("Login");
-        primaryStage.setScene(new Scene(root, 400, 300));
+        primaryStage.setScene(new Scene(root, 800, 600)); // Sesuaikan ukuran
         primaryStage.show();
     }
 
-    // Method untuk menampilkan tampilan sesuai dengan role pengguna
     public static void showMainView(String role) throws Exception {
         String viewPath;
 
-        switch (role.toLowerCase()) {
-            case "admin":
+        switch (role.toUpperCase()) {
+            case "ADMIN":
                 viewPath = "/com/ecommerce/admin/ManageUsersView.fxml";
                 primaryStage.setTitle("Admin Dashboard");
                 break;
-            case "customer":
+            case "CUSTOMER":
                 viewPath = "/com/ecommerce/customer/ProductView.fxml";
                 primaryStage.setTitle("Customer Dashboard");
                 break;
-            case "seller":
+            case "SELLER":
                 viewPath = "/com/ecommerce/seller/ManageProductsView.fxml";
                 primaryStage.setTitle("Seller Dashboard");
                 break;
@@ -46,7 +44,7 @@ public class App extends Application {
         }
 
         Parent root = FXMLLoader.load(App.class.getResource(viewPath));
-        primaryStage.setScene(new Scene(root, 800, 600));
+        primaryStage.setScene(new Scene(root, 1024, 768)); // Disesuaikan untuk ukuran dashboard
         primaryStage.show();
     }
 
