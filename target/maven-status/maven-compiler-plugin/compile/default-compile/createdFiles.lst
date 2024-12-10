@@ -22,6 +22,7 @@ com\ecommerce\customer\CustomerController.class
 com\ecommerce\utils\DatabaseUtils.class
 com\ecommerce\migrations\DatabaseMigrator.class
 com\ecommerce\customer\model\Customer.class
+com\ecommerce\seeder\DatabaseSeeder.class
 com\ecommerce\shared\ValidationUtils.class
 com\ecommerce\models\OrderSeller$Status.class
 com\ecommerce\models\OrderSeller.class
@@ -45,6 +46,7 @@ com\ecommerce\models\Review.class
 com\ecommerce\admin\ManageApplicationController.class
 com\ecommerce\dao\impl\SellerApplicationDAO.class
 com\ecommerce\dao\impl\ProductDAOImpl.class
+com\ecommerce\utils\LocalStorageUtils.class
 com\ecommerce\dao\impl\PaymentDAOImpl.class
 com\ecommerce\seller\ManageProductsController.class
 com\ecommerce\models\User$Role.class

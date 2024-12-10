@@ -47,7 +47,7 @@
                                  <children>
                                     <TextField fx:id="username" prefHeight="50.0" prefWidth="400.0" promptText="Username" style="-fx-background-radius: 25;" />
                                     <TextField fx:id="password" prefHeight="50.0" prefWidth="400.0" promptText="Password" style="-fx-background-radius: 25;" />
-                                    <TextField fx:id="password1" prefHeight="50.0" prefWidth="400.0" promptText="confirm Password" style="-fx-background-radius: 25;" />
+                                    <TextField fx:id="confirm_password" prefHeight="50.0" prefWidth="400.0" promptText="Confirm Password" style="-fx-background-radius: 25;" />
                                  </children>
                               </VBox>
                               <VBox alignment="CENTER" spacing="20.0">

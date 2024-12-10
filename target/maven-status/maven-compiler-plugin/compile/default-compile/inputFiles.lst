@@ -11,6 +11,7 @@ D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\models\Product.j
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\admin\ManageUsersController.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\admin\ManageApplicationController.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\utils\PasswordUtils.java
+D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\utils\LocalStorageUtils.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\shared\BaseController.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\shared\ValidationUtils.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\customer\CustomerController.java
