@@ -52,11 +52,11 @@ public interface UserDAO {
      * Mendapatkan pengguna berdasarkan username dan password. Metode ini
      * digunakan untuk autentikasi saat login.
      *
-     * @param username Username dari pengguna.
+     * @param email Username dari pengguna.
      * @param password Password dari pengguna (bisa dalam bentuk plaintext atau
      * hash, tergantung pada implementasi).
      * @return Objek User jika username dan password cocok, atau null jika tidak
      * ditemukan.
      */
-    User getUserByUsernameAndPassword(String username, String password);
+    User getUserByEmailAndPassword(String email, String plainPassword);
 }

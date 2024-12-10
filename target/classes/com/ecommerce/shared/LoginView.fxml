@@ -46,7 +46,7 @@
                            <children>
                               <VBox spacing="20.0">
                                  <children>
-                                    <TextField fx:id="usernameField" prefHeight="50.0" prefWidth="400.0" promptText="Username" style="-fx-background-radius: 25;" />
+                                    <TextField fx:id="emailField" prefHeight="50.0" prefWidth="400.0" promptText="Email" style="-fx-background-radius: 25;" />
                                     <PasswordField fx:id="passwordField" prefHeight="50.0" prefWidth="400.0" promptText="Password" style="-fx-background-radius: 25;" />
                                  </children>
                               </VBox>

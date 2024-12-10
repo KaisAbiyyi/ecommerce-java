@@ -14,6 +14,7 @@ import com.ecommerce.models.User;
 import com.ecommerce.models.User.Role;
 
 public class UserDAOImpl implements UserDAO {
+
     private final Connection connection;
 
     public UserDAOImpl(Connection connection) {
@@ -99,31 +100,37 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public User getUserByUsernameAndPassword(String username, String password) {
-        String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
+    public User getUserByEmailAndPassword(String email, String plainPassword) {
+        String sql = "SELECT * FROM users WHERE email = ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setString(1, username);
-            preparedStatement.setString(2, password);
+            preparedStatement.setString(1, email);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                return extractUserFromResultSet(resultSet);
+                // Ambil data pengguna dari database
+                User user = extractUserFromResultSet(resultSet);
+
+                // Verifikasi password
+                boolean isPasswordValid = user.checkPassword(plainPassword);
+                if (isPasswordValid) {
+                    return user; // Return user jika password cocok
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException("Error retrieving user by username and password: " + e.getMessage());
+            throw new RuntimeException("Error retrieving user by email and password: " + e.getMessage());
         }
-        return null;
+        return null; // Return null jika email tidak ditemukan atau password tidak cocok
     }
 
     private User extractUserFromResultSet(ResultSet resultSet) throws SQLException {
         return new User(
-            resultSet.getInt("id"),
-            resultSet.getString("username"),
-            resultSet.getString("email"),
-            resultSet.getString("password"),
-            Role.fromString(resultSet.getString("role")),
-            resultSet.getTimestamp("created_at").toLocalDateTime(),
-            resultSet.getTimestamp("updated_at").toLocalDateTime()
+                resultSet.getInt("id"),
+                resultSet.getString("username"),
+                resultSet.getString("email"),
+                resultSet.getString("password"),
+                Role.fromString(resultSet.getString("role")),
+                resultSet.getTimestamp("created_at").toLocalDateTime(),
+                resultSet.getTimestamp("updated_at").toLocalDateTime()
         );
     }
 }

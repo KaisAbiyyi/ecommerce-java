@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\seller\model\Seller.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\models\User.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\seller\ManageOrdersController.java
@@ -50,53 +49,3 @@ D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\models\Payment.j
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\test\DBTest.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\models\Order.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\models\OrderSeller.java
-=======
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\customer\ProductController.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\admin\ManageUsersController.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\shared\ValidationUtils.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\dao\impl\OrderItemDAOImpl.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\dao\impl\UserDAOImpl.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\config\DatabaseConfig.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\dao\impl\SellerApplicationDAO.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\models\OrderItem.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\dao\UserDAO.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\dao\impl\ProductDAOImpl.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\admin\ManageApplicationController.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\utils\DatabaseUtils.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\dao\impl\CategoryDAOImpl.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\dao\PaymentDAO.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\dao\ReviewDAO.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\models\Order.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\models\Product.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\models\Payment.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\customer\CustomerController.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\dao\CategoryDAO.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\dao\impl\OrderDAOImpl.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\models\User.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\customer\model\Customer.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\test\DBTest.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\seller\ManageOrdersController.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\App.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\models\Review.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\shared\LoginController.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\shared\AlertUtils.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\dao\OrderDAO.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\dao\impl\OrderSellerDAOImpl.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\module-info.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\shared\BaseController.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\customer\CartController.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\customer\CheckoutController.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\dao\OrderItemDAO.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\models\Category.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\dao\impl\ReviewDAOImpl.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\models\OrderSeller.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\dao\impl\PaymentDAOImpl.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\seller\model\Seller.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\seller\SellerController.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\admin\AdminController.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\admin\model\Admin.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\dao\ProductDAO.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\utils\PasswordUtils.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\dao\OrderSellerDAO.java
-C:\Users\nazar\OneDrive\Dokumen\Berkas.Kampus\Kampus.Semester3-4\Pemograman objek 1\Tubes\ecommerce-java\src\main\java\com\ecommerce\seller\ManageProductsController.java
->>>>>>> 698f89b35df16856b6bbb018b80ad7e58a03b464

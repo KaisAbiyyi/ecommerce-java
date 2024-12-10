@@ -17,7 +17,7 @@ import javafx.scene.control.TextField;
 public class LoginController {
 
     @FXML
-    private TextField usernameField;
+    private TextField emailField; // Ganti dari usernameField ke emailField
     @FXML
     private PasswordField passwordField;
     @FXML
@@ -40,27 +40,29 @@ public class LoginController {
 
     @FXML
     private void handleLogin() {
-        String username = usernameField.getText().trim();
+        String email = emailField.getText().trim();
         String password = passwordField.getText().trim();
-
-        if (username.isEmpty() || password.isEmpty()) {
-            showAlert("Login Gagal", "Username atau password tidak boleh kosong");
+    
+        if (email.isEmpty() || password.isEmpty()) {
+            showAlert("Login Gagal", "Email atau password tidak boleh kosong");
             return;
         }
-
+    
         try {
-            User user = userDAO.getUserByUsernameAndPassword(username, password);
+            // Cari dan verifikasi user berdasarkan email dan password
+            User user = userDAO.getUserByEmailAndPassword(email, password);
             if (user != null) {
                 showAlert("Login Berhasil", "Selamat datang, " + user.getUsername());
                 navigateToDashboard(user.getRole().name());
             } else {
-                showAlert("Login Gagal", "Username atau password salah");
+                showAlert("Login Gagal", "Email atau password salah");
             }
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Error", "Terjadi kesalahan saat login.");
         }
     }
+    
 
     private void navigateToDashboard(String role) {
         try {
