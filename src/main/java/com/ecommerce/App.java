@@ -16,8 +16,8 @@ public class App extends Application {
         primaryStage = stage;
 
         // Mulai aplikasi dengan ukuran default 1920x1080
-        primaryStage.setWidth(1920);
-        primaryStage.setHeight(1080);
+        primaryStage.setWidth(1440);
+        primaryStage.setHeight(1024);
 
         // Cek token di local storage
         String token = LocalStorageUtils.get("authToken");
