@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Rectangle2D?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1024.0" prefWidth="1440.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ecommerce.shared.LoginController">
+   <children>
+      <BorderPane prefHeight="1024.0" prefWidth="1440.0">
+         <right>
+            <Pane>
+               <children>
+                  <VBox layoutX="30.0" layoutY="300.0" prefHeight="97.0" prefWidth="540.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Login" wrappingWidth="473.7734375">
+                           <font>
+                              <Font size="48.0" />
+                           </font>
+                        </Text>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Please login to continue">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER" layoutX="30.0" layoutY="353.0" prefHeight="424.0" prefWidth="540.0" spacing="20.0">
+                     <children>
+                        <VBox prefWidth="408.0" spacing="50.0">
+                           <children>
+                              <VBox spacing="20.0">
+                                 <children>
+                                    <TextField fx:id="emailField" prefHeight="50.0" prefWidth="275.0" promptText="Email" style="-fx-background-radius: 25;">
+                                       <padding>
+                                          <Insets left="40.0" right="40.0" />
+                                       </padding>
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font></TextField>
+                                    <PasswordField fx:id="passwordField" prefHeight="50.0" prefWidth="400.0" promptText="Password" style="-fx-background-radius: 25;">
+                                       <padding>
+                                          <Insets left="40.0" right="40.0" />
+                                       </padding>
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font></PasswordField>
+                                 </children>
+                              </VBox>
+                              <VBox alignment="CENTER" spacing="20.0">
+                                 <children>
+                                    <Button fx:id="loginButton" mnemonicParsing="false" onAction="#handleLogin" prefHeight="50.0" prefWidth="540.0" style="-fx-background-radius: 25; -fx-background-color: rgba(100, 220, 191, 1);" text="Sign In" textAlignment="CENTER">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font></Button>
+                                    <Text fx:id="signUpText" onMouseClicked="#handleSignUpRedirect" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-cursor: hand;" text="Don’t have account? Sign Up" />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
+               </children>
+               <BorderPane.margin>
+                  <Insets />
+               </BorderPane.margin>
+            </Pane>
+         </right>
+         <padding>
+            <Insets right="80.0" />
+         </padding>
+         <center>
+            <ImageView fitHeight="964.0" fitWidth="806.0" pickOnBounds="true" style="-fx-background-radius: 50;" BorderPane.alignment="CENTER">
+               <image>
+                  <Image url="@../../../images/fuja.png" />
+               </image>
+               <BorderPane.margin>
+                  <Insets left="30.0" />
+               </BorderPane.margin>
+               <viewport>
+                  <Rectangle2D />
+               </viewport>
+               <clip>
+                  <Rectangle arcHeight="25" arcWidth="25" height="964" width="806" />
+               </clip>
+            </ImageView>
+         </center>
+      </BorderPane>
+   </children>
+</AnchorPane>

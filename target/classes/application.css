@@ -1,0 +1,19 @@
+/* Global styling */
+.root {
+    -fx-font-family: 'Arial';
+    -fx-background-color: #f5f5f5;
+}
+
+/* Button styling */
+.button {
+    -fx-background-radius: 25;
+    -fx-background-color: #64DCBF;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+}
+
+/* TextField styling */
+.text-field, .password-field {
+    -fx-background-radius: 25;
+    -fx-font-size: 14px;
+}
