@@ -7,6 +7,7 @@ D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\admin\model\Admi
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\dao\impl\OrderItemDAOImpl.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\dao\UserDAO.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\seller\ManageProductsController.java
+D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\shared\NavbarController.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\dao\ReviewDAO.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\models\Product.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\admin\ManageUsersController.java
@@ -25,6 +26,7 @@ D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\dao\OrderDAO.jav
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\config\DatabaseConfig.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\App.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\dao\impl\OrderSellerDAOImpl.java
+D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\shared\DashboardViewController.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\admin\AdminController.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\shared\LoginController.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\dao\ProductDAO.java
@@ -36,6 +38,7 @@ D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\dao\impl\OrderDA
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\shared\AlertUtils.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\customer\CheckoutController.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\models\OrderItem.java
+D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\product\ProductListViewController.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\dao\impl\ProductDAOImpl.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\utils\DatabaseUtils.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\customer\ProductController.java
@@ -47,6 +50,7 @@ D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\dao\OrderItemDAO
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\dao\OrderSellerDAO.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\models\Category.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\seeder\DatabaseSeeder.java
+D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\shared\ProfileBarController.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\models\Payment.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\test\DBTest.java
 D:\Documents\Applications\ecommerce\src\main\java\com\ecommerce\models\Order.java

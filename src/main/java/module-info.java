@@ -7,6 +7,7 @@ module com.ecommerce {
 
     // Membuka package FXML agar dapat diakses oleh FXMLLoader
     opens com.ecommerce.shared to javafx.fxml;
+    opens com.ecommerce.product to javafx.fxml;
     opens com.ecommerce.admin to javafx.fxml;
     opens com.ecommerce.customer to javafx.fxml;
     opens com.ecommerce.seller to javafx.fxml;

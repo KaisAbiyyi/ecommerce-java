@@ -12,8 +12,10 @@ com\ecommerce\utils\PasswordUtils.class
 com\ecommerce\admin\model\Admin.class
 com\ecommerce\dao\OrderDAO.class
 com\ecommerce\dao\OrderSellerDAO.class
+com\ecommerce\shared\NavbarController.class
 com\ecommerce\test\DBTest.class
 com\ecommerce\dao\impl\OrderItemDAOImpl.class
+com\ecommerce\product\ProductListViewController.class
 com\ecommerce\seller\model\Seller.class
 com\ecommerce\dao\CategoryDAO.class
 com\ecommerce\dao\impl\OrderDAOImpl.class
@@ -25,6 +27,7 @@ com\ecommerce\customer\model\Customer.class
 com\ecommerce\seeder\DatabaseSeeder.class
 com\ecommerce\shared\ValidationUtils.class
 com\ecommerce\models\OrderSeller$Status.class
+com\ecommerce\shared\ProfileBarController.class
 com\ecommerce\models\OrderSeller.class
 com\ecommerce\models\Product.class
 com\ecommerce\dao\impl\CategoryDAOImpl.class
@@ -51,6 +54,7 @@ com\ecommerce\utils\LocalStorageUtils.class
 com\ecommerce\dao\impl\PaymentDAOImpl.class
 com\ecommerce\seller\ManageProductsController.class
 com\ecommerce\models\User$Role.class
+com\ecommerce\shared\DashboardViewController.class
 com\ecommerce\dao\impl\OrderSellerDAOImpl.class
 com\ecommerce\seller\SellerController.class
 com\ecommerce\customer\CheckoutController.class

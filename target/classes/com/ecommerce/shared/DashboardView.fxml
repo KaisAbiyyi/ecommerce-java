@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="1024.0" prefWidth="1440.0" xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ecommerce.shared.DashboardViewController">
+    <children>
+        <!-- Kontainer untuk Navbar dan konten -->
+        <VBox spacing="0" AnchorPane.topAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.leftAnchor="0.0"
+              AnchorPane.bottomAnchor="0.0" fx:id="contentContainer">
+            <!-- Navbar -->
+            <fx:include source="Navbar.fxml" fx:id="navbar"/>
+
+            <!-- ScrollPane untuk konten -->
+            <ScrollPane fitToWidth="true" fitToHeight="true">
+                <content>
+                    <!-- Kontainer vertikal untuk daftar produk -->
+                    <VBox spacing="10" prefWidth="1440.0">
+                        <fx:include source="../product/ProductListView.fxml"/>
+                    </VBox>
+                </content>
+            </ScrollPane>
+        </VBox>
+
+        <!-- ProfileBar -->
+        <fx:include source="ProfileBar.fxml" fx:id="profileBar" visible="false" managed="false"
+                    AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0"/>
+
+    </children>
+</AnchorPane>

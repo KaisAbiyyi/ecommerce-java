@@ -54,7 +54,8 @@ public class App extends Application {
                 primaryStage.setTitle("Admin Dashboard");
                 break;
             case "CUSTOMER":
-                viewPath = "/com/ecommerce/customer/ProductView.fxml";
+                // Perbaikan jalur file DashboardView
+                viewPath = "/com/ecommerce/shared/DashboardView.fxml";
                 primaryStage.setTitle("Customer Dashboard");
                 break;
             case "SELLER":
@@ -74,6 +75,7 @@ public class App extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
+
 
     public static void logout() throws Exception {
         // Hapus token dari local storage
