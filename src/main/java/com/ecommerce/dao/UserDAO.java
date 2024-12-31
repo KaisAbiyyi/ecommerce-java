@@ -81,4 +81,21 @@ public interface UserDAO {
      * @return Objek User jika token ditemukan, atau null jika tidak ada.
      */
     User getUserByToken(String token);
+
+    /**
+     * Mendapatkan daftar pengguna dengan status seller request tertentu.
+     *
+     * @param sellerRequest Status seller request (NONE, PENDING, APPROVED, REJECTED).
+     * @return List berisi objek User dengan status seller request yang diminta.
+     */
+    List<User> getUsersBySellerRequest(User.SellerRequest sellerRequest);
+
+    /**
+     * Memperbarui status seller request dari pengguna.
+     *
+     * @param userId ID unik pengguna yang seller request-nya akan diperbarui.
+     * @param sellerRequest Status seller request baru (PENDING, APPROVED, REJECTED).
+     * @return true jika update berhasil, false jika gagal.
+     */
+    boolean updateSellerRequest(int userId, User.SellerRequest sellerRequest);
 }

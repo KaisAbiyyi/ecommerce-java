@@ -2,7 +2,10 @@ package com.ecommerce.layouts;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.layout.StackPane;
+
+import java.io.IOException;
 
 public class MainLayoutController {
 
@@ -37,21 +40,27 @@ public class MainLayoutController {
 
     public void loadContent(String fxmlPath) {
         try {
-            System.out.println("[DEBUG] Memuat halaman: " + fxmlPath);
+            System.out.println("[DEBUG] Memulai proses memuat halaman: " + fxmlPath);
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-            StackPane content = loader.load();
-            currentController = loader.getController(); // Simpan referensi controller aktif
+            Parent content = loader.load();
+
+            currentController = loader.getController(); // Simpan referensi controller
+
             contentPane.getChildren().clear(); // Bersihkan konten lama
             contentPane.getChildren().add(content); // Tambahkan konten baru
+
             System.out.println("[INFO] Halaman konten berhasil dimuat: " + fxmlPath);
-        } catch (ClassCastException e) {
-            System.err.println("[ERROR] Root elemen pada file FXML tidak sesuai dengan StackPane. Periksa elemen root di " + fxmlPath);
+        } catch (IOException e) {
+            System.err.println("[ERROR] File FXML tidak ditemukan atau tidak dapat dimuat: " + fxmlPath);
             e.printStackTrace();
         } catch (Exception e) {
             System.err.println("[ERROR] Gagal memuat konten: " + fxmlPath);
             e.printStackTrace();
         }
     }
+
+
 
     public Object getCurrentController() {
         return currentController;

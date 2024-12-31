@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.util.Map;
 
@@ -38,23 +39,49 @@ public class App extends Application {
         System.out.println("[DEBUG] userRole: " + role);
         System.out.println("[DEBUG] userId: " + userId);
 
-        if (isValidSession(token, role, userId)) {
+        boolean isLoggedIn = isValidSession(token, role, userId);
+
+        // Cek status login dan tentukan halaman yang akan dimuat
+        if (isLoggedIn) {
             loggedInUser = getUserById(Integer.parseInt(userId));
             if (loggedInUser != null) {
-                openMainPage(role);
+                mainLayoutController.loadContent(getDashboardPath(role)); // Tampilkan dashboard sesuai role
             } else {
-                System.out.println("[WARN] Pengguna tidak ada. Buka login.");
-                openLoginPage();
+                isLoggedIn = false; // User tidak ditemukan, anggap belum login
+                mainLayoutController.loadContent("/com/ecommerce/content/DashboardView.fxml"); // Tampilkan dashboard default
             }
         } else {
-            System.out.println("[WARN] Session invalid. Buka login.");
-            openLoginPage();
+            mainLayoutController.loadContent("/com/ecommerce/content/DashboardView.fxml"); // Tampilkan dashboard default
+        }
+
+        // Update tombol auth di NavbarController
+        if (mainLayoutController != null && mainLayoutController.getNavbarController() != null) {
+            NavbarController navbarController = mainLayoutController.getNavbarController();
+            navbarController.updateAuthButtonState(isLoggedIn); // Kirim status login ke tombol auth
+        } else {
+            System.err.println("[WARN] NavbarController belum diinisialisasi.");
+        }
+    }
+
+
+
+    private static String getDashboardPath(String role) {
+        switch (role.toUpperCase()) {
+            case "ADMIN":
+                return "/com/ecommerce/admin/ManageUsersView.fxml";
+            case "CUSTOMER":
+                return "/com/ecommerce/content/DashboardView.fxml";
+            case "SELLER":
+                return "/com/ecommerce/seller/ManageProductsView.fxml";
+            default:
+                System.err.println("[ERROR] Role tidak dikenali: " + role);
+                return "/com/ecommerce/shared/LoginView.fxml";
         }
     }
 
     private void initializeMainLayout() {
         try {
-            // Hindari inisialisasi ulang jika sudah ada instance
+            // Cek apakah mainLayoutController sudah diinisialisasi
             if (mainLayoutController != null) {
                 System.out.println("[INFO] MainLayoutController sudah diinisialisasi. Menggunakan instance yang ada.");
                 return;
@@ -62,29 +89,37 @@ public class App extends Application {
 
             System.out.println("[DEBUG] Memulai inisialisasi MainLayout...");
 
+            // Muat file FXML MainLayout
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ecommerce/layouts/MainLayout.fxml"));
             AnchorPane root = loader.load();
 
+            // Ambil controller dari FXML
             mainLayoutController = loader.getController();
             if (mainLayoutController == null) {
-                throw new IllegalStateException("MainLayoutController tidak dapat diinisialisasi. Pastikan FXML memiliki controller yang benar.");
+                throw new IllegalStateException("[ERROR] MainLayoutController tidak dapat diinisialisasi. Pastikan FXML memiliki controller yang benar.");
             }
             System.out.println("[DEBUG] MainLayoutController berhasil diambil.");
 
+            // Buat Scene baru dan tambahkan stylesheet jika tersedia
             Scene scene = new Scene(root);
             String stylesheetPath = "/application.css";
-
             if (getClass().getResource(stylesheetPath) != null) {
                 scene.getStylesheets().add(getClass().getResource(stylesheetPath).toExternalForm());
                 System.out.println("[DEBUG] Stylesheet berhasil dimuat: " + stylesheetPath);
+            } else {
+                System.err.println("[WARN] Stylesheet tidak ditemukan di path: " + stylesheetPath);
             }
 
+            // Set scene ke primaryStage
             primaryStage.setScene(scene);
             primaryStage.setTitle("E-Commerce App");
             primaryStage.show();
             System.out.println("[INFO] MainLayout berhasil diinisialisasi dan ditampilkan.");
         } catch (IllegalStateException e) {
             System.err.println("[ERROR] Terjadi masalah dengan struktur atau controller MainLayout.");
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.err.println("[ERROR] File FXML MainLayout.fxml tidak ditemukan atau tidak dapat dimuat.");
             e.printStackTrace();
         } catch (Exception e) {
             System.err.println("[ERROR] Gagal menginisialisasi MainLayout karena kesalahan tidak terduga.");
@@ -126,55 +161,18 @@ public class App extends Application {
             e.printStackTrace();
         }
     }
+
     public static void openMainPage(String role) {
         try {
-            // Gunakan instance MainLayoutController yang sudah ada
-            if (mainLayoutController == null) {
-                FXMLLoader loader = new FXMLLoader(App.class.getResource("/com/ecommerce/layouts/MainLayout.fxml"));
-                AnchorPane root = loader.load();
-
-                mainLayoutController = loader.getController();
-                Scene mainScene = new Scene(root);
-                primaryStage.setScene(mainScene);
-                primaryStage.setTitle(role + " Dashboard - E-Commerce App");
-            }
-
-            // Pastikan role diatur dengan benar
             if (mainLayoutController != null) {
-                String contentPath; // Path konten yang akan dimuat
-
-                switch (role.toUpperCase()) {
-                    case "ADMIN":
-                        contentPath = "/com/ecommerce/admin/ManageUsersView.fxml";
-                        break;
-                    case "CUSTOMER":
-                        contentPath = "/com/ecommerce/content/DashboardView.fxml";
-                        break;
-                    case "SELLER":
-                        contentPath = "/com/ecommerce/seller/ManageProductsView.fxml";
-                        break;
-                    default:
-                        System.err.println("[WARN] Peran tidak dikenali. Membuka login.");
-                        new App().openLoginPage();
-                        return;
-                }
-
-                // Tambahkan halaman ke stack navigasi melalui NavbarController
-                if (mainLayoutController.getNavbarController() != null) {
-                    NavbarController navbar = mainLayoutController.getNavbarController();
-                    // Tambahkan ke stack navigasi dengan data tambahan (misalnya, role)
-                    navbar.addPageToStack(contentPath, Map.of("role", role));
-                }
-
-                // Muat konten di MainLayout
+                String contentPath = getDashboardPath(role);
                 mainLayoutController.loadContent(contentPath);
-
-                System.out.println("[INFO] Main page berhasil dibuka untuk peran: " + role);
+                System.out.println("[INFO] Main page berhasil dimuat untuk role: " + role);
             } else {
-                throw new IllegalStateException("MainLayoutController tidak ditemukan.");
+                throw new IllegalStateException("[ERROR] MainLayoutController tidak ditemukan.");
             }
         } catch (Exception e) {
-            System.err.println("[ERROR] Gagal membuka main page.");
+            System.err.println("[ERROR] Terjadi kesalahan saat membuka Main Page: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -206,50 +204,35 @@ public class App extends Application {
             LocalStorageUtils.remove("userId");
 
             loggedInUser = null;
-            System.out.println("[INFO] Logout berhasil. Restart aplikasi.");
-            new App().start(primaryStage);
+            System.out.println("[INFO] Logout berhasil. Menampilkan halaman login.");
+            if (mainLayoutController != null) {
+                mainLayoutController.loadContent("/com/ecommerce/shared/LoginView.fxml");
+            }
         } catch (Exception e) {
             System.err.println("[ERROR] Error logout: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-    public static User getLoggedInUser() {
-        if (loggedInUser != null) {
-            System.out.println("User saat ini: " + loggedInUser.getUsername());
-        } else {
-            System.out.println("Tidak ada user login.");
-        }
-        return loggedInUser;
-    }
 
     public static void setLoggedInUser(User user) {
         try {
             if (user != null) {
-                // Set user yang login
                 loggedInUser = user;
                 System.out.println("[INFO] User login berhasil diatur: " + user.getUsername() + " (" + user.getEmail() + ")");
 
-                // Simpan detail user ke LocalStorage
                 LocalStorageUtils.set("authToken", "TOKEN_" + user.getId() + "_" + System.currentTimeMillis());
                 LocalStorageUtils.set("userRole", user.getRole().name());
                 LocalStorageUtils.set("userId", String.valueOf(user.getId()));
                 System.out.println("[INFO] Detail user disimpan ke LocalStorage.");
 
-                // Jika MainLayoutController tersedia, lakukan pembaruan UI
                 if (mainLayoutController != null) {
-                    try {
-                        mainLayoutController.loadContent("/com/ecommerce/content/DashboardView.fxml");
-                        System.out.println("[INFO] Dashboard berhasil dimuat setelah login.");
-                    } catch (Exception e) {
-                        System.err.println("[ERROR] Gagal memuat Dashboard setelah login.");
-                        e.printStackTrace();
-                    }
+                    mainLayoutController.loadContent("/com/ecommerce/content/DashboardView.fxml");
+                    System.out.println("[INFO] Dashboard berhasil dimuat setelah login.");
                 } else {
                     System.err.println("[WARN] MainLayoutController belum diinisialisasi. Dashboard tidak diperbarui.");
                 }
             } else {
-                // Reset logged-in user jika null
                 loggedInUser = null;
                 LocalStorageUtils.remove("authToken");
                 LocalStorageUtils.remove("userRole");
@@ -257,7 +240,6 @@ public class App extends Application {
                 System.out.println("[INFO] User login direset. Semua session detail dihapus.");
             }
         } catch (Exception e) {
-            // Tangani error saat mengatur logged-in user
             System.err.println("[ERROR] Terjadi kesalahan saat mengatur logged-in user:");
             e.printStackTrace();
         }

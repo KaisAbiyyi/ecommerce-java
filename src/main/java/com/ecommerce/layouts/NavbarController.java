@@ -3,6 +3,7 @@ package com.ecommerce.layouts;
 import com.ecommerce.App;
 import com.ecommerce.content.ProductDetailViewController;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 
 import java.util.Map;
 import java.util.Stack;
@@ -16,7 +17,8 @@ public class NavbarController {
     private final Stack<PageState> forwardStack = new Stack<>();
     private PageState currentPageState = null;
 
-
+    @FXML
+    private Button authButton;
     /**
      * Mengatur referensi ke MainLayoutController.
      */
@@ -36,6 +38,64 @@ public class NavbarController {
 
         public Object getAdditionalData() {
             return additionalData;
+        }
+    }
+
+    /**
+     * Navigasi ke halaman Dashboard/Home.
+     */
+    @FXML
+    public void goHome() {
+        try {
+            // Path ke halaman Dashboard/Home
+            String homePagePath = "/com/ecommerce/content/DashboardView.fxml";
+
+            // Tambahkan halaman ke stack navigasi
+            addPageToStack(homePagePath, null);
+
+            // Muat halaman Dashboard/Home
+            if (mainLayoutController != null) {
+                mainLayoutController.loadContent(homePagePath);
+                System.out.println("[INFO] Navigasi ke halaman Home: " + homePagePath);
+            } else {
+                System.err.println("[ERROR] MainLayoutController belum diatur.");
+            }
+        } catch (Exception e) {
+            System.err.println("[ERROR] Gagal berpindah ke halaman Home.");
+            e.printStackTrace();
+        }
+    }
+
+    public void updateAuthButtonState(boolean isLoggedIn) {
+        try {
+            if (isLoggedIn) {
+                System.out.println("[INFO] User terautentikasi. Menampilkan tombol Logout.");
+                authButton.setText("Logout");
+                authButton.setOnAction(event -> handleLogout());
+            } else {
+                System.out.println("[INFO] User belum login. Menampilkan tombol Login.");
+                authButton.setText("Login");
+                authButton.setOnAction(event -> goToLogin());
+            }
+        } catch (Exception e) {
+            System.err.println("[ERROR] Gagal memperbarui tombol autentikasi.");
+            e.printStackTrace();
+        }
+    }
+    private void goToLogin() {
+        try {
+            String loginPagePath = "/com/ecommerce/shared/LoginView.fxml";
+            clearNavigationStacks(); // Bersihkan stack navigasi
+            addPageToStack(loginPagePath, null);
+            if (mainLayoutController != null) {
+                mainLayoutController.loadContent(loginPagePath);
+                System.out.println("[INFO] Navigasi ke halaman Login: " + loginPagePath);
+            } else {
+                System.err.println("[ERROR] MainLayoutController belum diatur.");
+            }
+        } catch (Exception e) {
+            System.err.println("[ERROR] Gagal berpindah ke halaman Login.");
+            e.printStackTrace();
         }
     }
 
@@ -59,11 +119,23 @@ public class NavbarController {
     }
 
 
-
     public void setMainLayoutController(MainLayoutController mainLayoutController) {
         this.mainLayoutController = mainLayoutController;
         System.out.println("[INFO] MainLayoutController berhasil diatur pada NavbarController.");
     }
+
+    public void clearNavigationStacks() {
+        try {
+            backStack.clear(); // Bersihkan stack navigasi sebelumnya
+            forwardStack.clear(); // Bersihkan stack navigasi berikutnya
+            currentPageState = null; // Reset halaman saat ini
+            System.out.println("[INFO] Semua stack navigasi telah dibersihkan.");
+        } catch (Exception e) {
+            System.err.println("[ERROR] Gagal membersihkan stack navigasi:");
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * Menampilkan atau menyembunyikan ProfileBar.
@@ -72,13 +144,18 @@ public class NavbarController {
     public void handleLogout() {
         try {
             System.out.println("[INFO] Logout button clicked. Logging out...");
+            clearNavigationStacks(); // Bersihkan stack navigasi
             App.logout();
+            goToLogin(); // Navigasi ke halaman login
             System.out.println("[INFO] Logout berhasil. Redirect ke halaman login.");
         } catch (Exception e) {
             System.err.println("[ERROR] Terjadi kesalahan saat logout:");
             e.printStackTrace();
         }
     }
+
+
+
 
     /**
      * Memulihkan data tambahan dari PageState ke controller saat ini.

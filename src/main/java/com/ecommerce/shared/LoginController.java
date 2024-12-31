@@ -47,13 +47,19 @@ public class LoginController {
     private void setupDatabaseConnection() {
         try {
             Connection connection = DatabaseUtils.getConnection();
-            this.userDAO = new UserDAOImpl(connection);
-            System.out.println("[INFO] Database connection berhasil diinisialisasi.");
+            if (connection != null) {
+                this.userDAO = new UserDAOImpl(connection);
+                System.out.println("[INFO] Database connection berhasil diinisialisasi.");
+            } else {
+                System.err.println("[ERROR] Database connection null.");
+                showAlert("Error", "Gagal menghubungkan ke database.");
+            }
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Error", "Database connection failed.");
         }
     }
+
 
     /**
      * Setup event handler untuk tombol login.
@@ -65,13 +71,21 @@ public class LoginController {
     /**
      * Proses login pengguna.
      */
+    /**
+     * Proses login pengguna.
+     */
     @FXML
     private void handleLogin() {
         String email = emailField.getText().trim();
         String password = passwordField.getText().trim();
 
         if (email.isEmpty() || password.isEmpty()) {
-            showAlert("Login Gagal", "Email atau password tidak boleh kosong");
+            showAlert("Login Gagal", "Email atau password tidak boleh kosong.");
+            return;
+        }
+
+        if (userDAO == null) {
+            showAlert("Error", "Database connection belum tersedia.");
             return;
         }
 
@@ -80,13 +94,14 @@ public class LoginController {
             if (user != null) {
                 processSuccessfulLogin(user);
             } else {
-                showAlert("Login Gagal", "Email atau password salah");
+                showAlert("Login Gagal", "Email atau password salah.");
             }
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Error", "Terjadi kesalahan saat login.");
         }
     }
+
 
     /**
      * Proses setelah login berhasil.
@@ -103,14 +118,19 @@ public class LoginController {
             LocalStorageUtils.set("userId", String.valueOf(user.getId()));
 
             System.out.println("[INFO] Login berhasil. User: " + user.getUsername());
+            System.out.println("[DEBUG] Token: " + token + ", Role: " + user.getRole().name());
 
-            showAlert("Login Berhasil", "Selamat datang, " + user.getUsername());
+            // Perbarui navbar setelah login
+            updateNavbarAfterLogin();
+
+            // Navigasi ke dashboard
             navigateToDashboard(user.getRole().name());
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Error", "Terjadi kesalahan saat memproses login.");
         }
     }
+
 
     /**
      * Generate token untuk sesi login.
@@ -129,10 +149,39 @@ public class LoginController {
      */
     private void navigateToDashboard(String role) {
         try {
-            App.openMainPage(role);
+            System.out.println("[INFO] Navigasi ke dashboard untuk role: " + role);
+
+            // Pastikan MainLayoutController tersedia
+            if (App.mainLayoutController == null) {
+                throw new IllegalStateException("[ERROR] MainLayoutController tidak ditemukan.");
+            }
+
+            // Muat ulang konten dashboard
+            App.mainLayoutController.loadContent("/com/ecommerce/content/DashboardView.fxml");
+
+            System.out.println("[INFO] Dashboard berhasil dimuat untuk role: " + role);
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Error", "Tidak dapat membuka dashboard.");
+        }
+    }
+
+    private void updateNavbarAfterLogin() {
+        if (App.mainLayoutController != null && App.mainLayoutController.getNavbarController() != null) {
+            App.mainLayoutController.getNavbarController().updateAuthButtonState(true); // Set tombol Logout
+            System.out.println("[INFO] Navbar diperbarui setelah login.");
+        }
+    }
+    public void navigateToLogin() {
+        try {
+            System.out.println("[INFO] Navigasi ke halaman login.");
+
+            if (App.mainLayoutController != null) {
+                App.mainLayoutController.loadContent("/com/ecommerce/shared/LoginView.fxml");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Error", "Tidak dapat membuka halaman login.");
         }
     }
 
@@ -156,16 +205,17 @@ public class LoginController {
     @FXML
     private void handleSignUpRedirect() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ecommerce/shared/RegisterView.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = (Stage) emailField.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Register");
-            System.out.println("[INFO] Berhasil membuka halaman register.");
-        } catch (IOException e) {
+            if (App.mainLayoutController != null) {
+                App.mainLayoutController.loadContent("/com/ecommerce/shared/RegisterView.fxml");
+                System.out.println("[INFO] Berhasil membuka halaman register.");
+            } else {
+                System.err.println("[ERROR] MainLayoutController tidak ditemukan.");
+            }
+        } catch (Exception e) {
             e.printStackTrace();
             showAlert("Error", "Tidak dapat membuka halaman register.");
         }
     }
+
+
 }

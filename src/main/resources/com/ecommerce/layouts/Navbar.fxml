@@ -11,8 +11,17 @@
             xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.ecommerce.layouts.NavbarController">
     <children>
+        <!-- Home Button -->
+        <Button layoutX="20.0" layoutY="97.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="96.0"
+                style="-fx-background-radius: 25; -fx-background-color: #4CAF50; -fx-text-fill: white;" text="Home"
+                onAction="#goHome">
+            <font>
+                <Font name="System Bold" size="16.0"/>
+            </font>
+        </Button>
+
         <!-- Back Button -->
-        <Button layoutX="20.0" layoutY="97.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="48.0"
+        <Button layoutX="136.0" layoutY="97.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="48.0"
                 style="-fx-background-radius: 100; -fx-background-color: #FF5733; -fx-text-fill: white;" text="←"
                 onAction="#goBack">
             <font>
@@ -21,7 +30,7 @@
         </Button>
 
         <!-- Forward Button -->
-        <Button layoutX="88.0" layoutY="97.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="48.0"
+        <Button layoutX="204.0" layoutY="97.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="48.0"
                 style="-fx-background-radius: 100; -fx-background-color: #33C4FF; -fx-text-fill: white;" text="→"
                 onAction="#goForward">
             <font>
@@ -30,7 +39,7 @@
         </Button>
 
         <!-- TextField Search -->
-        <TextField layoutX="160.0" layoutY="95.0" prefHeight="48.0" prefWidth="1030.0" promptText="Search For"
+        <TextField layoutX="272.0" layoutY="95.0" prefHeight="48.0" prefWidth="918.0" promptText="Search For"
                    style="-fx-background-radius: 25;">
             <padding>
                 <Insets bottom="13.0" left="16.0" right="16.0" top="13.0"/>
@@ -40,14 +49,14 @@
             </font>
         </TextField>
 
-        <!-- Logout Button -->
-        <Button layoutX="1272.0" layoutY="97.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="96.0"
-                style="-fx-background-radius: 25; -fx-background-color: #FF6666; -fx-text-fill: white;" text="Logout"
-                onAction="#handleLogout">
+        <!-- Auth Button (Login/Logout) -->
+        <Button fx:id="authButton" layoutX="1272.0" layoutY="97.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="96.0"
+                style="-fx-background-radius: 25; -fx-background-color: #FF6666; -fx-text-fill: white;" text="Logout">
             <font>
                 <Font name="System Bold" size="16.0"/>
             </font>
         </Button>
+
 
         <!-- Title -->
         <Text fill="#697077" layoutX="656.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Toko Kami">

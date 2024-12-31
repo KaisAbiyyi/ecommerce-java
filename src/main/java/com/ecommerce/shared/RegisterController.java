@@ -1,9 +1,9 @@
 package com.ecommerce.shared;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.time.LocalDateTime;
 
+import com.ecommerce.App;
 import com.ecommerce.dao.UserDAO;
 import com.ecommerce.dao.impl.UserDAOImpl;
 import com.ecommerce.models.User;
@@ -11,28 +11,24 @@ import com.ecommerce.utils.DatabaseUtils;
 import com.ecommerce.utils.PasswordUtils;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 
 public class RegisterController {
 
     @FXML
-    private TextField username; // Perbaikan dari usernameField
+    private TextField username;
 
     @FXML
-    private TextField email; // Perbaikan dari emailField
+    private TextField email;
 
     @FXML
-    private PasswordField password; // Perbaikan dari passwordField
+    private PasswordField password;
 
     @FXML
-    private PasswordField confirm_password; // Perbaikan dari confirmPasswordField
+    private PasswordField confirm_password;
 
     @FXML
     private Button sign_up;
@@ -99,7 +95,9 @@ public class RegisterController {
             // Simpan ke database
             userDAO.addUser(newUser);
             showAlert("Register Berhasil", "Akun berhasil dibuat. Silakan login.");
-            handleBackToLogin();
+
+            // Navigasi ke halaman login tanpa mengganti scene
+            App.mainLayoutController.loadContent("/com/ecommerce/shared/LoginView.fxml");
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Error", "Terjadi kesalahan pada proses registrasi.");
@@ -109,12 +107,10 @@ public class RegisterController {
     @FXML
     private void handleBackToLogin() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ecommerce/shared/LoginView.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) username.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Login");
-        } catch (IOException e) {
+            // Navigasi ke halaman login dalam MainLayout
+            App.mainLayoutController.loadContent("/com/ecommerce/shared/LoginView.fxml");
+            System.out.println("[INFO] Berhasil kembali ke halaman login.");
+        } catch (Exception e) {
             e.printStackTrace();
             showAlert("Error", "Tidak dapat membuka halaman login.");
         }

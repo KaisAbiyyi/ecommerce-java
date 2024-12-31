@@ -11,6 +11,7 @@ public class User {
     private String email;
     private String password; // Password yang disimpan dalam bentuk hash
     private Role role;
+    private SellerRequest sellerRequest; // Tambahan untuk status permintaan menjadi seller
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -27,17 +28,31 @@ public class User {
         }
     }
 
+    public enum SellerRequest {
+        NONE, PENDING, APPROVED, REJECTED;
+
+        public static SellerRequest fromString(String requestString) {
+            for (SellerRequest request : SellerRequest.values()) {
+                if (request.name().equalsIgnoreCase(requestString)) {
+                    return request;
+                }
+            }
+            throw new IllegalArgumentException("Invalid seller request: " + requestString);
+        }
+    }
+
     // Constructor kosong
     public User() {
     }
 
     // Constructor penuh
-    public User(int id, String username, String email, String password, Role role, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public User(int id, String username, String email, String password, Role role, SellerRequest sellerRequest, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
         this.role = role;
+        this.sellerRequest = sellerRequest;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -91,6 +106,14 @@ public class User {
         this.role = role;
     }
 
+    public SellerRequest getSellerRequest() {
+        return sellerRequest;
+    }
+
+    public void setSellerRequest(SellerRequest sellerRequest) {
+        this.sellerRequest = sellerRequest;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -114,6 +137,7 @@ public class User {
                 + ", username='" + username + '\''
                 + ", email='" + email + '\''
                 + ", role=" + role
+                + ", sellerRequest=" + sellerRequest
                 + ", createdAt=" + createdAt
                 + ", updatedAt=" + updatedAt
                 + '}';

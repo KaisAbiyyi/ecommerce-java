@@ -7,94 +7,80 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1024.0" prefWidth="1440.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ecommerce.shared.LoginController">
+<StackPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ecommerce.shared.LoginController" style="-fx-background-color: #f7f7f7;">
    <children>
-      <BorderPane prefHeight="1024.0" prefWidth="1440.0">
-         <right>
-            <Pane>
-               <children>
-                  <VBox layoutX="30.0" layoutY="300.0" prefHeight="97.0" prefWidth="540.0">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Login" wrappingWidth="473.7734375">
-                           <font>
-                              <Font size="48.0" />
-                           </font>
-                        </Text>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Please login to continue">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Text>
-                     </children>
-                  </VBox>
-                  <VBox alignment="CENTER" layoutX="30.0" layoutY="353.0" prefHeight="424.0" prefWidth="540.0" spacing="20.0">
-                     <children>
-                        <VBox prefWidth="408.0" spacing="50.0">
-                           <children>
-                              <VBox spacing="20.0">
-                                 <children>
-                                    <TextField fx:id="emailField" prefHeight="50.0" prefWidth="275.0" promptText="Email" style="-fx-background-radius: 25;">
-                                       <padding>
-                                          <Insets left="40.0" right="40.0" />
-                                       </padding>
-                                       <font>
-                                          <Font size="16.0" />
-                                       </font></TextField>
-                                    <PasswordField fx:id="passwordField" prefHeight="50.0" prefWidth="400.0" promptText="Password" style="-fx-background-radius: 25;">
-                                       <padding>
-                                          <Insets left="40.0" right="40.0" />
-                                       </padding>
-                                       <font>
-                                          <Font size="16.0" />
-                                       </font></PasswordField>
-                                 </children>
-                              </VBox>
-                              <VBox alignment="CENTER" spacing="20.0">
-                                 <children>
-                                    <Button fx:id="loginButton" mnemonicParsing="false" onAction="#handleLogin" prefHeight="50.0" prefWidth="540.0" style="-fx-background-radius: 25; -fx-background-color: rgba(100, 220, 191, 1);" text="Sign In" textAlignment="CENTER">
-                                       <font>
-                                          <Font name="System Bold" size="16.0" />
-                                       </font></Button>
-                                    <Text fx:id="signUpText" onMouseClicked="#handleSignUpRedirect" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-cursor: hand;" text="Don’t have account? Sign Up" />
-                                 </children>
-                              </VBox>
-                           </children>
-                        </VBox>
-                     </children>
-                  </VBox>
-               </children>
-               <BorderPane.margin>
-                  <Insets />
-               </BorderPane.margin>
-            </Pane>
-         </right>
-         <padding>
-            <Insets right="80.0" />
-         </padding>
-         <center>
-            <ImageView fitHeight="964.0" fitWidth="806.0" pickOnBounds="true" style="-fx-background-radius: 50;" BorderPane.alignment="CENTER">
+      <!-- Container for the form and image -->
+      <HBox alignment="CENTER" spacing="50.0" StackPane.alignment="CENTER">
+         <children>
+            <!-- Image Section -->
+            <ImageView fitHeight="600.0" fitWidth="400.0" pickOnBounds="true" style="-fx-background-radius: 50;">
                <image>
                   <Image url="@../../../images/fuja.png" />
                </image>
-               <BorderPane.margin>
-                  <Insets left="30.0" />
-               </BorderPane.margin>
                <viewport>
                   <Rectangle2D />
                </viewport>
                <clip>
-                  <Rectangle arcHeight="25" arcWidth="25" height="964" width="806" />
+                  <Rectangle arcHeight="25" arcWidth="25" height="600" width="400" />
                </clip>
             </ImageView>
-         </center>
-      </BorderPane>
+
+            <!-- Form Section -->
+            <VBox alignment="CENTER" spacing="20.0" prefWidth="400.0">
+               <children>
+                  <!-- Title and Subtitle -->
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Login">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Please login to continue" wrappingWidth="350.0">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Text>
+
+                  <!-- Input Fields -->
+                  <VBox spacing="15.0" alignment="CENTER">
+                     <children>
+                        <TextField fx:id="emailField" prefHeight="45.0" prefWidth="350.0" promptText="Email" style="-fx-background-radius: 25; -fx-padding: 0 20;">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </TextField>
+                        <PasswordField fx:id="passwordField" prefHeight="45.0" prefWidth="350.0" promptText="Password" style="-fx-background-radius: 25; -fx-padding: 0 20;">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </PasswordField>
+                     </children>
+                  </VBox>
+
+                  <!-- Buttons and Links -->
+                  <VBox spacing="15.0" alignment="CENTER">
+                     <children>
+                        <Button fx:id="loginButton" mnemonicParsing="false" onAction="#handleLogin" prefHeight="45.0" prefWidth="350.0" style="-fx-background-radius: 25; -fx-background-color: #64DCBF; -fx-text-fill: white;" text="Sign In">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Button>
+                        <Text fx:id="signUpText" onMouseClicked="#handleSignUpRedirect" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-cursor: hand; -fx-text-fill: #007BFF;" text="Don’t have an account? Sign Up">
+                           <font>
+                              <Font size="12.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
    </children>
-</AnchorPane>
+</StackPane>

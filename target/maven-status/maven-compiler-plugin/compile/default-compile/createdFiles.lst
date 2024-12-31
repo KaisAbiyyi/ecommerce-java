@@ -1,4 +1,6 @@
+com\ecommerce\layouts\AdminSidebarController.class
 com\ecommerce\shared\BaseController.class
+com\ecommerce\models\User$SellerRequest.class
 com\ecommerce\admin\AdminController.class
 com\ecommerce\dao\UserDAO.class
 com\ecommerce\components\ProductCard.class
@@ -35,6 +37,7 @@ com\ecommerce\dao\impl\PaymentDAOImpl.class
 com\ecommerce\dao\impl\OrderSellerDAOImpl.class
 com\ecommerce\seller\SellerController.class
 com\ecommerce\config\DatabaseConfig.class
+com\ecommerce\layouts\AdminLayoutController.class
 com\ecommerce\models\OrderItem.class
 com\ecommerce\shared\LoginController.class
 com\ecommerce\models\Payment.class
@@ -44,7 +47,6 @@ com\ecommerce\dao\OrderItemDAO.class
 com\ecommerce\dao\impl\UserDAOImpl.class
 com\ecommerce\utils\PasswordUtils.class
 com\ecommerce\admin\model\Admin.class
-com\ecommerce\test\DBTest.class
 com\ecommerce\content\DashboardViewController.class
 com\ecommerce\layouts\MainLayoutController.class
 com\ecommerce\layouts\NavbarController.class
