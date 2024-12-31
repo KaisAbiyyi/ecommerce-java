@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.ecommerce.content.DashboardViewController">
+    <ScrollPane fitToWidth="true" fitToHeight="true">
+        <content>
+            <VBox spacing="10" prefWidth="1440.0">
+                <fx:include source="../product/ProductListView.fxml"/>
+            </VBox>
+        </content>
+    </ScrollPane>
+</StackPane>

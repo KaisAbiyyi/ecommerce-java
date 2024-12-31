@@ -9,7 +9,6 @@ import com.ecommerce.dao.impl.UserDAOImpl;
 import com.ecommerce.models.User;
 import com.ecommerce.utils.DatabaseUtils;
 import com.ecommerce.utils.LocalStorageUtils;
-
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -23,27 +22,49 @@ import javafx.stage.Stage;
 public class LoginController {
 
     @FXML
-    private TextField emailField; // Ganti dari usernameField ke emailField
+    private TextField emailField;
+
     @FXML
     private PasswordField passwordField;
+
     @FXML
     private Button loginButton;
 
     private UserDAO userDAO;
 
+    /**
+     * Inisialisasi controller dan setup dependensi.
+     */
     @FXML
     private void initialize() {
+        setupDatabaseConnection();
+        setupEventHandlers();
+    }
+
+    /**
+     * Setup koneksi database.
+     */
+    private void setupDatabaseConnection() {
         try {
             Connection connection = DatabaseUtils.getConnection();
             this.userDAO = new UserDAOImpl(connection);
+            System.out.println("[INFO] Database connection berhasil diinisialisasi.");
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Error", "Database connection failed.");
         }
+    }
 
+    /**
+     * Setup event handler untuk tombol login.
+     */
+    private void setupEventHandlers() {
         loginButton.setOnAction(event -> handleLogin());
     }
 
+    /**
+     * Proses login pengguna.
+     */
     @FXML
     private void handleLogin() {
         String email = emailField.getText().trim();
@@ -55,17 +76,9 @@ public class LoginController {
         }
 
         try {
-            // Cari dan verifikasi user berdasarkan email dan password
             User user = userDAO.getUserByEmailAndPassword(email, password);
             if (user != null) {
-                // Simpan token user ke local storage
-                String token = generateToken(user); // Simulasi token
-                LocalStorageUtils.set("authToken", token);
-                LocalStorageUtils.set("userRole", user.getRole().name());
-                LocalStorageUtils.set("userId", String.valueOf(user.getId()));
-
-                showAlert("Login Berhasil", "Selamat datang, " + user.getUsername());
-                navigateToDashboard(user.getRole().name());
+                processSuccessfulLogin(user);
             } else {
                 showAlert("Login Gagal", "Email atau password salah");
             }
@@ -75,19 +88,60 @@ public class LoginController {
         }
     }
 
-    private String generateToken(User user) {
-        // Simulasi token (gunakan algoritma lebih aman jika diperlukan)
-        return "TOKEN_" + user.getId() + "_" + System.currentTimeMillis();
-    }
-
-    private void navigateToDashboard(String role) {
+    /**
+     * Proses setelah login berhasil.
+     *
+     * @param user Pengguna yang berhasil login.
+     */
+    private void processSuccessfulLogin(User user) {
         try {
-            App.showMainView(role);
+            String token = generateToken(user);
+            App.setLoggedInUser(user);
+
+            LocalStorageUtils.set("authToken", token);
+            LocalStorageUtils.set("userRole", user.getRole().name());
+            LocalStorageUtils.set("userId", String.valueOf(user.getId()));
+
+            System.out.println("[INFO] Login berhasil. User: " + user.getUsername());
+
+            showAlert("Login Berhasil", "Selamat datang, " + user.getUsername());
+            navigateToDashboard(user.getRole().name());
         } catch (Exception e) {
             e.printStackTrace();
+            showAlert("Error", "Terjadi kesalahan saat memproses login.");
         }
     }
 
+    /**
+     * Generate token untuk sesi login.
+     *
+     * @param user Pengguna yang login.
+     * @return Token yang dihasilkan.
+     */
+    private String generateToken(User user) {
+        return "TOKEN_" + user.getId() + "_" + System.currentTimeMillis();
+    }
+
+    /**
+     * Navigasi ke dashboard berdasarkan peran pengguna.
+     *
+     * @param role Peran pengguna.
+     */
+    private void navigateToDashboard(String role) {
+        try {
+            App.openMainPage(role);
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Error", "Tidak dapat membuka dashboard.");
+        }
+    }
+
+    /**
+     * Menampilkan pesan alert.
+     *
+     * @param title   Judul alert.
+     * @param content Isi pesan alert.
+     */
     private void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
@@ -96,17 +150,19 @@ public class LoginController {
         alert.showAndWait();
     }
 
+    /**
+     * Aksi untuk membuka halaman register.
+     */
     @FXML
     private void handleSignUpRedirect() {
         try {
-            // Load RegisterView.fxml
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ecommerce/shared/RegisterView.fxml"));
             Parent root = loader.load();
 
-            // Ambil stage dari komponen saat ini
             Stage stage = (Stage) emailField.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.setTitle("Register");
+            System.out.println("[INFO] Berhasil membuka halaman register.");
         } catch (IOException e) {
             e.printStackTrace();
             showAlert("Error", "Tidak dapat membuka halaman register.");

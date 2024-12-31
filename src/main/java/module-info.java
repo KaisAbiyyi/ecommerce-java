@@ -15,5 +15,7 @@ module com.ecommerce {
 
     // Mengekspor package agar dapat diimpor dari modul eksternal
     exports com.ecommerce;
-    exports com.ecommerce.utils; // Hanya jika utils dipakai di luar modul ini
+    exports com.ecommerce.utils;
+    opens com.ecommerce.layouts to javafx.fxml;
+    opens com.ecommerce.content to javafx.fxml; // Hanya jika utils dipakai di luar modul ini
 }

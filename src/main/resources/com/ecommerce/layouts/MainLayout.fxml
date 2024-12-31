@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.StackPane?>
+
+<AnchorPane prefWidth="1440.0" prefHeight="1024.0" xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.ecommerce.layouts.MainLayoutController">
+    <children>
+        <!-- Layout utama -->
+        <VBox spacing="0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+              AnchorPane.rightAnchor="0.0">
+            <!-- Navbar -->
+            <fx:include source="Navbar.fxml" fx:id="navbar"/>
+
+            <!-- Konten dinamis -->
+            <StackPane fx:id="contentPane" prefHeight="800.0" prefWidth="1440.0"/>
+        </VBox>
+    </children>
+</AnchorPane>

@@ -1,0 +1,244 @@
+package com.ecommerce.layouts;
+
+import com.ecommerce.App;
+import com.ecommerce.content.ProductDetailViewController;
+import javafx.fxml.FXML;
+
+import java.util.Map;
+import java.util.Stack;
+
+public class NavbarController {
+
+    private MainLayoutController mainLayoutController;
+
+    // Riwayat navigasi untuk mendukung goBack dan navigasi lainnya
+    private final Stack<PageState> backStack = new Stack<>();
+    private final Stack<PageState> forwardStack = new Stack<>();
+    private PageState currentPageState = null;
+
+
+    /**
+     * Mengatur referensi ke MainLayoutController.
+     */
+
+    public static class PageState {
+        private final String pagePath;
+        private final Object additionalData;
+
+        public PageState(String pagePath, Object additionalData) {
+            this.pagePath = pagePath;
+            this.additionalData = additionalData;
+        }
+
+        public String getPagePath() {
+            return pagePath;
+        }
+
+        public Object getAdditionalData() {
+            return additionalData;
+        }
+    }
+
+
+
+    public void addPageToStack(String page, Object additionalData) {
+        if (page == null || page.isEmpty()) {
+            System.err.println("[ERROR] Halaman tidak valid untuk ditambahkan ke stack.");
+            return;
+        }
+
+        if (currentPageState != null) {
+            backStack.push(currentPageState); // Simpan halaman saat ini ke backStack
+            System.out.println("[INFO] Halaman saat ini ditambahkan ke backStack: " + currentPageState.getPagePath());
+        }
+
+        forwardStack.clear(); // Kosongkan forwardStack
+        currentPageState = new PageState(page, additionalData); // Set halaman baru sebagai currentPageState
+
+        logStacks(); // Log stack navigasi untuk debugging
+    }
+
+
+
+    public void setMainLayoutController(MainLayoutController mainLayoutController) {
+        this.mainLayoutController = mainLayoutController;
+        System.out.println("[INFO] MainLayoutController berhasil diatur pada NavbarController.");
+    }
+
+    /**
+     * Menampilkan atau menyembunyikan ProfileBar.
+     */
+    @FXML
+    public void handleLogout() {
+        try {
+            System.out.println("[INFO] Logout button clicked. Logging out...");
+            App.logout();
+            System.out.println("[INFO] Logout berhasil. Redirect ke halaman login.");
+        } catch (Exception e) {
+            System.err.println("[ERROR] Terjadi kesalahan saat logout:");
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Memulihkan data tambahan dari PageState ke controller saat ini.
+     *
+     * @param additionalData Data tambahan yang ingin dipulihkan.
+     */
+    public void restoreAdditionalData(Object additionalData) {
+        if (additionalData == null) {
+            System.out.println("[WARN] Tidak ada data tambahan untuk dipulihkan.");
+            return;
+        }
+
+        // Identifikasi tipe data tambahan dan operasikan ke controller terkait
+        if (additionalData instanceof Integer) {
+            // Contoh: Untuk halaman detail produk
+            if (mainLayoutController != null) {
+                Object controller = mainLayoutController.getCurrentController();
+                if (controller instanceof ProductDetailViewController) {
+                    ((ProductDetailViewController) controller).setProductId((Integer) additionalData);
+                    System.out.println("[INFO] Data tambahan productId dipulihkan: " + additionalData);
+                } else {
+                    System.err.println("[WARN] Controller saat ini bukan ProductDetailViewController.");
+                }
+            } else {
+                System.err.println("[ERROR] MainLayoutController belum diatur.");
+            }
+        } else {
+            System.out.println("[WARN] Tipe data tambahan tidak dikenali: " + additionalData.getClass().getName());
+        }
+    }
+
+
+    /**
+     * Navigasi ke halaman sebelumnya.
+     */
+
+    @FXML
+    public void goBack() {
+        if (!backStack.isEmpty()) {
+            try {
+                forwardStack.push(currentPageState); // Simpan halaman saat ini ke forwardStack
+                currentPageState = backStack.pop(); // Ambil halaman sebelumnya dari backStack
+                mainLayoutController.loadContent(currentPageState.getPagePath()); // Muat halaman sebelumnya
+                restoreAdditionalData(currentPageState); // Pulihkan data tambahan
+
+                // Cek jika halaman adalah ProductDetailView
+                if (currentPageState.getPagePath().equals("/com/ecommerce/content/ProductDetailView.fxml")) {
+                    ProductDetailViewController controller =
+                            (ProductDetailViewController) App.mainLayoutController.getCurrentController();
+                    if (controller != null) {
+                        Object additionalData = currentPageState.getAdditionalData();
+                        if (additionalData instanceof Map<?, ?> additionalDataMap) {
+                            Object productIdObj = additionalDataMap.get("productId");
+                            if (productIdObj instanceof Integer productId) {
+                                controller.setProductId(productId); // Set Product ID
+                                System.out.println("[INFO] Product ID dipulihkan: " + productId);
+                            } else {
+                                System.err.println("[ERROR] Data tambahan Product ID tidak valid.");
+                            }
+                        } else {
+                            System.err.println("[ERROR] Additional Data bukan tipe Map.");
+                        }
+                    } else {
+                        System.err.println("[ERROR] Controller untuk ProductDetailView tidak ditemukan.");
+                    }
+                }
+
+                logStacks();
+                System.out.println("[INFO] Berpindah ke halaman sebelumnya: " + currentPageState.getPagePath());
+            } catch (Exception e) {
+                System.err.println("[ERROR] Gagal berpindah ke halaman sebelumnya.");
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("[WARN] Tidak ada halaman sebelumnya.");
+        }
+    }
+
+    @FXML
+    public void goForward() {
+        if (!forwardStack.isEmpty()) {
+            try {
+                backStack.push(currentPageState); // Simpan halaman saat ini ke backStack
+                currentPageState = forwardStack.pop(); // Ambil halaman berikutnya dari forwardStack
+                mainLayoutController.loadContent(currentPageState.getPagePath()); // Muat halaman berikutnya
+                restoreAdditionalData(currentPageState); // Pulihkan data tambahan
+
+                // Cek jika halaman adalah ProductDetailView
+                if (currentPageState.getPagePath().equals("/com/ecommerce/content/ProductDetailView.fxml")) {
+                    ProductDetailViewController controller =
+                            (ProductDetailViewController) App.mainLayoutController.getCurrentController();
+                    if (controller != null) {
+                        Object additionalData = currentPageState.getAdditionalData();
+                        if (additionalData instanceof Map<?, ?> additionalDataMap) {
+                            Object productIdObj = additionalDataMap.get("productId");
+                            if (productIdObj instanceof Integer productId) {
+                                controller.setProductId(productId); // Set Product ID
+                                System.out.println("[INFO] Product ID dipulihkan: " + productId);
+                            } else {
+                                System.err.println("[ERROR] Data tambahan Product ID tidak valid.");
+                            }
+                        } else {
+                            System.err.println("[ERROR] Additional Data bukan tipe Map.");
+                        }
+                    } else {
+                        System.err.println("[ERROR] Controller untuk ProductDetailView tidak ditemukan.");
+                    }
+                }
+
+                logStacks();
+                System.out.println("[INFO] Berpindah ke halaman berikutnya: " + currentPageState.getPagePath());
+            } catch (Exception e) {
+                System.err.println("[ERROR] Gagal berpindah ke halaman berikutnya.");
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("[WARN] Tidak ada halaman berikutnya.");
+        }
+    }
+
+
+    /**
+     * Log isi stack navigasi.
+     */
+    /**
+     * Log isi stack navigasi, termasuk data tambahan.
+     */
+    private void logStacks() {
+        System.out.println("=== Navigasi Log ===");
+
+        // Log Back Stack
+        System.out.println("Back Stack:");
+        if (backStack.isEmpty()) {
+            System.out.println("  [Kosong]");
+        } else {
+            backStack.forEach(pageState -> System.out.println("  - " + pageState));
+        }
+
+        // Log Forward Stack
+        System.out.println("Forward Stack:");
+        if (forwardStack.isEmpty()) {
+            System.out.println("  [Kosong]");
+        } else {
+            forwardStack.forEach(pageState -> System.out.println("  - " + pageState));
+        }
+
+        // Log Current Page
+        System.out.println("Current Page:");
+        if (currentPageState != null) {
+            System.out.println("  - Page Path: " + currentPageState.getPagePath());
+            if (currentPageState.getAdditionalData() != null) {
+                System.out.println("  - Additional Data: " + currentPageState.getAdditionalData());
+            } else {
+                System.out.println("  - Additional Data: [Kosong]");
+            }
+        } else {
+            System.out.println("  [Kosong]");
+        }
+
+        System.out.println("====================");
+    }
+
+}

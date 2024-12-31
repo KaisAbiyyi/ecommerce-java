@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<StackPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.ecommerce.content.ProductDetailViewController"
+           style="-fx-padding: 20;">
+    <children>
+        <VBox alignment="CENTER" spacing="20" prefWidth="1440.0" style="-fx-padding: 20;">
+            <!-- Product Image -->
+            <ImageView fx:id="productImageView" fitHeight="400.0" fitWidth="450.0"
+                       pickOnBounds="true" preserveRatio="true"
+                       style="-fx-effect: dropshadow(gaussian, black, 10, 0, 2, 2);" />
+
+            <!-- Product Details -->
+            <VBox alignment="CENTER_LEFT" prefHeight="400.0" prefWidth="660.0" spacing="20.0"
+                  style="-fx-background-color: #f9fafb; -fx-background-radius: 15; -fx-padding: 20; -fx-border-color: #d1d5db; -fx-border-width: 1; -fx-border-radius: 15;">
+                <children>
+                    <Text fx:id="productNameLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Nama Produk">
+                        <font>
+                            <Font name="System Bold" size="24.0" />
+                        </font>
+                    </Text>
+                    <Text fx:id="productPriceLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Rp 0">
+                        <font>
+                            <Font name="System Bold" size="32.0" />
+                        </font>
+                    </Text>
+                    <Text fx:id="productDescriptionLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Deskripsi Produk"
+                          wrappingWidth="600.0">
+                        <font>
+                            <Font size="16.0" />
+                        </font>
+                    </Text>
+                </children>
+            </VBox>
+
+            <!-- Quantity and Buttons -->
+            <VBox alignment="CENTER" prefHeight="150.0" prefWidth="660.0" spacing="20.0"
+                  style="-fx-background-color: #f9fafb; -fx-background-radius: 15; -fx-padding: 20; -fx-border-color: #d1d5db; -fx-border-width: 1; -fx-border-radius: 15;">
+                <children>
+                    <HBox alignment="CENTER" spacing="20.0">
+                        <children>
+                            <TextField fx:id="quantityField" alignment="CENTER"
+                                       style="-fx-border-radius: 100; -fx-background-radius: 100; -fx-border-color: #9ca3af; -fx-border-width: 1;" text="1" prefWidth="100">
+                                <font>
+                                    <Font size="16.0" />
+                                </font>
+                            </TextField>
+                            <Text text="Stock Total:" />
+                            <Text fx:id="productStockLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                <font>
+                                    <Font name="System Bold" size="16.0" />
+                                </font>
+                            </Text>
+                        </children>
+                    </HBox>
+                    <HBox alignment="CENTER" spacing="20.0">
+                        <children>
+                            <!-- Buy Now Button -->
+                            <Button fx:id="buyNowButton" mnemonicParsing="false" text="Buy Now"
+                                    style="-fx-background-color: #10b981; -fx-text-fill: white; -fx-font-size: 14; -fx-background-radius: 8;" />
+
+                            <!-- Add to Cart Button -->
+                            <Button fx:id="addToCartButton" mnemonicParsing="false" text="Add to Cart"
+                                    style="-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-font-size: 14; -fx-background-radius: 8;" />
+                        </children>
+                    </HBox>
+                </children>
+            </VBox>
+        </VBox>
+    </children>
+</StackPane>
