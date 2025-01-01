@@ -88,7 +88,8 @@ public class RegisterController {
             newUser.setUsername(usernameValue);
             newUser.setEmail(emailValue);
             newUser.setPassword(hashedPassword);
-            newUser.setRole(User.Role.CUSTOMER);
+            newUser.setRole(User.Role.CUSTOMER); // Default role langsung sebagai CUSTOMER
+            newUser.setSellerRequest(User.SellerRequest.NONE);
             newUser.setCreatedAt(LocalDateTime.now());
             newUser.setUpdatedAt(LocalDateTime.now());
 
@@ -96,13 +97,14 @@ public class RegisterController {
             userDAO.addUser(newUser);
             showAlert("Register Berhasil", "Akun berhasil dibuat. Silakan login.");
 
-            // Navigasi ke halaman login tanpa mengganti scene
+            // Navigasi ke halaman login
             App.mainLayoutController.loadContent("/com/ecommerce/shared/LoginView.fxml");
         } catch (Exception e) {
             e.printStackTrace();
             showAlert("Error", "Terjadi kesalahan pada proses registrasi.");
         }
     }
+
 
     @FXML
     private void handleBackToLogin() {
