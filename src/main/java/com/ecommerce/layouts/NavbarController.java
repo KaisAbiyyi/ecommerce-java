@@ -3,8 +3,13 @@ package com.ecommerce.layouts;
 import com.ecommerce.App;
 import com.ecommerce.content.ProductDetailViewController;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.fxml.FXMLLoader;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.Stack;
 
@@ -22,6 +27,10 @@ public class NavbarController {
     /**
      * Mengatur referensi ke MainLayoutController.
      */
+
+    @FXML
+    private Button cartButton; // Tombol "Cart"
+
 
     public static class PageState {
         private final String pagePath;
@@ -65,6 +74,30 @@ public class NavbarController {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Navigasi ke halaman Cart.
+     */
+    @FXML
+    public void goToCart() {
+        try {
+            System.out.println("[DEBUG] Tombol Cart ditekan."); // Log ini memastikan metode dipanggil
+
+            String cartPagePath = "/com/ecommerce/customer/CartView.fxml";
+
+            if (mainLayoutController != null) {
+                mainLayoutController.loadContent(cartPagePath);
+                System.out.println("[INFO] Berpindah ke halaman Cart.");
+            } else {
+                System.err.println("[ERROR] MainLayoutController belum diatur.");
+            }
+        } catch (Exception e) {
+            System.err.println("[ERROR] Gagal memuat halaman Cart.");
+            e.printStackTrace();
+        }
+    }
+
+
 
     public void updateAuthButtonState(boolean isLoggedIn) {
         try {

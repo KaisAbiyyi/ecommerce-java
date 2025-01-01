@@ -10,11 +10,12 @@ import java.io.IOException;
 public class MainLayoutController {
 
     @FXML
-    private StackPane contentPane;
+    private StackPane contentPane; // Tempat untuk memuat konten halaman
 
-    private Object currentController;
+    private Object currentController; // Referensi controller halaman saat ini
+
     @FXML
-    private NavbarController navbarController;
+    private NavbarController navbarController; // Referensi ke NavbarController
 
     /**
      * Inisialisasi MainLayoutController.
@@ -37,7 +38,6 @@ public class MainLayoutController {
      *
      * @param fxmlPath Path file FXML yang ingin dimuat.
      */
-
     public void loadContent(String fxmlPath) {
         try {
             System.out.println("[DEBUG] Memulai proses memuat halaman: " + fxmlPath);
@@ -45,10 +45,12 @@ public class MainLayoutController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent content = loader.load();
 
-            currentController = loader.getController(); // Simpan referensi controller
+            // Simpan referensi controller halaman yang baru dimuat
+            currentController = loader.getController();
 
-            contentPane.getChildren().clear(); // Bersihkan konten lama
-            contentPane.getChildren().add(content); // Tambahkan konten baru
+            // Bersihkan konten lama dan tambahkan konten baru
+            contentPane.getChildren().clear();
+            contentPane.getChildren().add(content);
 
             System.out.println("[INFO] Halaman konten berhasil dimuat: " + fxmlPath);
         } catch (IOException e) {
@@ -60,13 +62,20 @@ public class MainLayoutController {
         }
     }
 
-
-
+    /**
+     * Mengembalikan controller halaman yang sedang aktif.
+     *
+     * @return Referensi ke controller halaman aktif.
+     */
     public Object getCurrentController() {
         return currentController;
     }
 
-
+    /**
+     * Mengembalikan referensi ke NavbarController.
+     *
+     * @return Referensi ke NavbarController.
+     */
     public NavbarController getNavbarController() {
         if (navbarController != null) {
             return navbarController;
@@ -75,5 +84,4 @@ public class MainLayoutController {
             return null;
         }
     }
-
 }

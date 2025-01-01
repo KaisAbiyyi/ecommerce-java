@@ -50,13 +50,21 @@
         </TextField>
 
         <!-- Auth Button (Login/Logout) -->
-        <Button fx:id="authButton" layoutX="1272.0" layoutY="97.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="96.0"
+        <Button fx:id="authButton" layoutX="1200.0" layoutY="97.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="96.0"
                 style="-fx-background-radius: 25; -fx-background-color: #FF6666; -fx-text-fill: white;" text="Logout">
             <font>
                 <Font name="System Bold" size="16.0"/>
             </font>
         </Button>
 
+        <!-- Cart Button -->
+        <Button fx:id="cartButton" layoutX="1310.0" layoutY="97.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="96.0"
+                style="-fx-background-radius: 25; -fx-background-color: #FFD700; -fx-text-fill: black;" text="Cart"
+                onAction="#goToCart">
+        <font>
+                <Font name="System Bold" size="16.0"/>
+            </font>
+        </Button>
 
         <!-- Title -->
         <Text fill="#697077" layoutX="656.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Toko Kami">
