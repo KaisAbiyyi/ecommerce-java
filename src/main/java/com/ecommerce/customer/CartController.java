@@ -1,96 +1,102 @@
 package com.ecommerce.customer;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CartController {
 
     @FXML
-    private ListView<String> cartList; // ListView untuk menampilkan item di keranjang
+    private VBox cartItemsContainer;
 
     @FXML
-    private Label totalPriceLabel; // Label untuk menampilkan total harga
+    private Label totalPriceLabel;
 
     @FXML
-    private Button checkoutButton; // Tombol untuk melakukan checkout
+    private Button checkoutButton;
 
-    @FXML
-    private Button backButton; // Tombol untuk kembali ke halaman dashboard
+    private final List<CartItem> cartItems = new ArrayList<>();
+    private double totalPrice = 0.0;
 
-    private final ObservableList<String> cartItems = FXCollections.observableArrayList(); // Data item di keranjang
-    private double totalPrice = 0.0; // Total harga
-
-    /**
-     * Inisialisasi controller saat file FXML dimuat.
-     */
     @FXML
     public void initialize() {
-        // Hubungkan data keranjang ke ListView
-        cartList.setItems(cartItems);
-
-        // Contoh data awal (bisa dihapus dan diganti dengan data dinamis)
-        addItemToCart("Samsung Galaxy S21", 800.00);
-        addItemToCart("Apple MacBook Pro 14-inch", 2000.00);
-
-        // Hitung total harga awal
-        updateTotalPrice();
-
-        // Tambahkan event handler ke tombol checkout
-        checkoutButton.setOnAction(event -> handleCheckout());
-
-        // Tambahkan event handler ke tombol kembali
-        backButton.setOnAction(event -> handleBack());
-    }
-
-    /**
-     * Tambahkan item ke keranjang.
-     *
-     * @param item  Nama item.
-     * @param price Harga item.
-     */
-    public void addItemToCart(String item, double price) {
-        cartItems.add(item + " - Rp" + price);
-        totalPrice += price;
+        System.out.println("[INFO] CartController diinisialisasi.");
         updateTotalPrice();
     }
 
-    /**
-     * Hitung ulang total harga.
-     */
-    private void updateTotalPrice() {
-        totalPriceLabel.setText("Rp" + String.format("%.2f", totalPrice));
-    }
+    public void addItemToCart(String productName, double price, int quantity) {
+        // Cek apakah produk sudah ada di keranjang
+        CartItem existingItem = cartItems.stream()
+                .filter(item -> item.getName().equals(productName))
+                .findFirst()
+                .orElse(null);
 
-    /**
-     * Proses checkout: mencetak item, dan menghapus semua item dari keranjang.
-     */
-    private void handleCheckout() {
-        if (cartItems.isEmpty()) {
-            System.out.println("[INFO] Keranjang kosong. Tidak ada yang bisa di-checkout.");
-            return;
+        if (existingItem != null) {
+            existingItem.increaseQuantity(quantity);
+        } else {
+            CartItem newItem = new CartItem(productName, price, quantity);
+            cartItems.add(newItem);
+
+            // Tambahkan elemen UI untuk item baru
+            HBox cartItemCard = createCartItemCard(newItem);
+            cartItemsContainer.getChildren().add(cartItemCard);
         }
 
-        System.out.println("[INFO] Melakukan checkout untuk item berikut:");
-        cartItems.forEach(item -> System.out.println("- " + item));
-
-        // Kosongkan keranjang setelah checkout
-        cartItems.clear();
-        totalPrice = 0.0;
         updateTotalPrice();
-
-        System.out.println("[INFO] Keranjang telah dikosongkan setelah checkout.");
     }
 
-    /**
-     * Tangani tombol kembali ke dashboard.
-     */
-    private void handleBack() {
-        System.out.println("[INFO] Kembali ke halaman dashboard.");
-        // Navigasi kembali ke dashboard (misalnya menggunakan MainLayoutController)
-        // Implementasi navigasi disesuaikan dengan struktur aplikasi Anda
+    private HBox createCartItemCard(CartItem item) {
+        HBox card = new HBox(10);
+        card.setStyle("-fx-border-color: lightgray; -fx-border-width: 1; -fx-border-radius: 10; -fx-padding: 10;");
+
+        Label productNameLabel = new Label(item.getName());
+        productNameLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+
+        Label priceLabel = new Label("Rp" + String.format("%,.0f", item.getPrice() * item.getQuantity()));
+        priceLabel.setStyle("-fx-font-size: 14px;");
+
+        Button decreaseButton = new Button("-");
+        decreaseButton.setOnAction(e -> {
+            item.decreaseQuantity();
+            if (item.getQuantity() <= 0) {
+                cartItems.remove(item);
+                cartItemsContainer.getChildren().remove(card);
+            }
+            updateCartItemUI(item, priceLabel);
+        });
+
+        Label quantityLabel = new Label(String.valueOf(item.getQuantity()));
+
+        Button increaseButton = new Button("+");
+        increaseButton.setOnAction(e -> {
+            item.increaseQuantity(1);
+            updateCartItemUI(item, priceLabel);
+        });
+
+        Button removeButton = new Button("X");
+        removeButton.setStyle("-fx-text-fill: red;");
+        removeButton.setOnAction(e -> {
+            cartItems.remove(item);
+            cartItemsContainer.getChildren().remove(card);
+            updateTotalPrice();
+        });
+
+        card.getChildren().addAll(productNameLabel, decreaseButton, quantityLabel, increaseButton, priceLabel, removeButton);
+        return card;
+    }
+
+    private void updateCartItemUI(CartItem item, Label priceLabel) {
+        priceLabel.setText("Rp" + String.format("%,.0f", item.getPrice() * item.getQuantity()));
+        updateTotalPrice();
+    }
+
+    private void updateTotalPrice() {
+        totalPrice = cartItems.stream().mapToDouble(item -> item.getPrice() * item.getQuantity()).sum();
+        totalPriceLabel.setText("Rp" + String.format("%,.2f", totalPrice));
     }
 }

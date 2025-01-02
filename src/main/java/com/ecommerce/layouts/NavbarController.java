@@ -81,21 +81,20 @@ public class NavbarController {
     @FXML
     public void goToCart() {
         try {
-            System.out.println("[DEBUG] Tombol Cart ditekan."); // Log ini memastikan metode dipanggil
+            System.out.println("[DEBUG] Tombol Cart ditekan.");
+            mainLayoutController.loadContent("/com/ecommerce/customer/CartView.fxml");
 
-            String cartPagePath = "/com/ecommerce/customer/CartView.fxml";
-
-            if (mainLayoutController != null) {
-                mainLayoutController.loadContent(cartPagePath);
-                System.out.println("[INFO] Berpindah ke halaman Cart.");
+            if (mainLayoutController.getCartController() == null) {
+                System.err.println("[ERROR] CartController masih null setelah navigasi ke CartView.");
             } else {
-                System.err.println("[ERROR] MainLayoutController belum diatur.");
+                System.out.println("[INFO] CartController berhasil diperoleh setelah navigasi.");
             }
         } catch (Exception e) {
             System.err.println("[ERROR] Gagal memuat halaman Cart.");
             e.printStackTrace();
         }
     }
+
 
 
 

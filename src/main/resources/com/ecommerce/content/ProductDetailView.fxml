@@ -71,7 +71,8 @@
 
                             <!-- Add to Cart Button -->
                             <Button fx:id="addToCartButton" mnemonicParsing="false" text="Add to Cart"
-                                    style="-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-font-size: 14; -fx-background-radius: 8;" />
+                                    style="-fx-background-color: #3b82f6; -fx-text-fill: white; -fx-font-size: 14; -fx-background-radius: 8;"
+                                    onAction="#handleAddToCart" />
                         </children>
                     </HBox>
                 </children>

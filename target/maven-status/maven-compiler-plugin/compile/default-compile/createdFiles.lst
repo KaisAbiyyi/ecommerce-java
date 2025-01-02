@@ -55,6 +55,7 @@ com\ecommerce\utils\DatabaseUtils.class
 com\ecommerce\models\OrderSeller$Status.class
 com\ecommerce\models\OrderSeller.class
 com\ecommerce\models\Product.class
+com\ecommerce\customer\CartItem.class
 com\ecommerce\dao\impl\CategoryDAOImpl.class
 com\ecommerce\utils\Router.class
 com\ecommerce\admin\ManageUsersController.class

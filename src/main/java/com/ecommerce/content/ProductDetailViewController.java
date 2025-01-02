@@ -1,5 +1,6 @@
 package com.ecommerce.content;
 
+import com.ecommerce.customer.CartController;
 import com.ecommerce.layouts.MainLayoutController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -45,6 +46,7 @@ public class ProductDetailViewController {
     private MainLayoutController mainLayoutController;
 
     private int productId;
+    private double productPrice;
 
     /**
      * Inisialisasi controller.
@@ -102,6 +104,9 @@ public class ProductDetailViewController {
         productPriceLabel.setText("Rp" + String.format("%,.0f", product.getPrice()));
         productDescriptionLabel.setText(product.getDescription());
         productStockLabel.setText(String.valueOf(product.getStock()));
+
+        // Perbarui variabel productPrice
+        productPrice = product.getPrice();
 
         try {
             Image productImage = new Image(getClass().getResource(product.getImageUrl()).toExternalForm());
@@ -175,22 +180,31 @@ public class ProductDetailViewController {
     }
 
     /**
-     * Tangani klik tombol Buy Now.
-     */
-    @FXML
-    private void handleBuyNow() {
-        System.out.println("[INFO] Buy Now ditekan untuk produk ID: " + productId);
-    }
-
-    /**
      * Tangani klik tombol Add to Cart.
      */
     @FXML
     private void handleAddToCart() {
         System.out.println("[INFO] Add to Cart ditekan untuk produk ID: " + productId);
-        String quantity = quantityField.getText();
-        System.out.println("[INFO] Jumlah yang ditambahkan: " + quantity);
+
+        if (mainLayoutController != null) {
+            CartController cartController = mainLayoutController.getCartController();
+
+            if (cartController != null) {
+                try {
+                    int quantity = Integer.parseInt(quantityField.getText());
+                    cartController.addItemToCart(productNameLabel.getText(), productPrice, quantity);
+                    System.out.println("[INFO] Produk berhasil ditambahkan ke keranjang: " + productNameLabel.getText());
+                } catch (NumberFormatException e) {
+                    System.err.println("[ERROR] Input jumlah tidak valid.");
+                }
+            } else {
+                System.err.println("[ERROR] CartController tidak ditemukan.");
+            }
+        } else {
+            System.err.println("[ERROR] MainLayoutController tidak diatur.");
+        }
     }
+
 
     /**
      * Kelas representasi produk.

@@ -1,5 +1,6 @@
 package com.ecommerce.layouts;
 
+import com.ecommerce.customer.CartController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,6 +15,8 @@ public class MainLayoutController {
 
     private Object currentController; // Referensi controller halaman saat ini
 
+    private CartController cartController; // Referensi ke CartController
+
     @FXML
     private NavbarController navbarController; // Referensi ke NavbarController
 
@@ -23,6 +26,18 @@ public class MainLayoutController {
     @FXML
     public void initialize() {
         System.out.println("[INFO] MainLayoutController diinisialisasi.");
+
+        // Preload CartView untuk memastikan CartController siap digunakan
+        try {
+            System.out.println("[DEBUG] Preloading CartView...");
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ecommerce/customer/CartView.fxml"));
+            loader.load();
+            cartController = loader.getController();
+            System.out.println("[INFO] CartController berhasil di-preload.");
+        } catch (IOException e) {
+            System.err.println("[ERROR] Gagal preload CartView:");
+            e.printStackTrace();
+        }
 
         // Hubungkan NavbarController dengan MainLayoutController
         if (navbarController != null) {
@@ -48,6 +63,18 @@ public class MainLayoutController {
             // Simpan referensi controller halaman yang baru dimuat
             currentController = loader.getController();
 
+            // Jika halaman yang dimuat adalah CartView, simpan referensi ke CartController
+            if (currentController instanceof CartController) {
+                cartController = (CartController) currentController;
+                System.out.println("[INFO] CartController berhasil diatur.");
+            }
+
+            // Jika halaman yang dimuat adalah ProductDetailView, set MainLayoutController
+            if (currentController instanceof com.ecommerce.content.ProductDetailViewController) {
+                ((com.ecommerce.content.ProductDetailViewController) currentController).setMainLayoutController(this);
+                System.out.println("[INFO] MainLayoutController berhasil diatur pada ProductDetailViewController.");
+            }
+
             // Bersihkan konten lama dan tambahkan konten baru
             contentPane.getChildren().clear();
             contentPane.getChildren().add(content);
@@ -55,9 +82,6 @@ public class MainLayoutController {
             System.out.println("[INFO] Halaman konten berhasil dimuat: " + fxmlPath);
         } catch (IOException e) {
             System.err.println("[ERROR] File FXML tidak ditemukan atau tidak dapat dimuat: " + fxmlPath);
-            e.printStackTrace();
-        } catch (Exception e) {
-            System.err.println("[ERROR] Gagal memuat konten: " + fxmlPath);
             e.printStackTrace();
         }
     }
@@ -83,5 +107,19 @@ public class MainLayoutController {
             System.err.println("[ERROR] NavbarController belum diinisialisasi. Periksa pengaturan di FXML.");
             return null;
         }
+    }
+
+    /**
+     * Mengembalikan referensi ke CartController.
+     *
+     * @return Referensi ke CartController.
+     */
+    public CartController getCartController() {
+        if (cartController != null) {
+            System.out.println("[INFO] Mengembalikan referensi ke CartController.");
+        } else {
+            System.err.println("[WARN] CartController belum diinisialisasi.");
+        }
+        return cartController;
     }
 }
