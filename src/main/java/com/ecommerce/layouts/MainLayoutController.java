@@ -32,6 +32,11 @@ public class MainLayoutController {
         }
     }
 
+    public interface MainLayoutAware {
+        void setMainLayoutController(MainLayoutController mainLayoutController);
+    }
+
+
     /**
      * Memuat halaman konten dinamis ke dalam contentPane.
      *
@@ -45,10 +50,18 @@ public class MainLayoutController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent content = loader.load();
 
-            currentController = loader.getController(); // Simpan referensi controller
+            Object controller = loader.getController(); // Simpan referensi controller
+            currentController = controller; // Tetapkan controller ke variabel global jika diperlukan
 
-            contentPane.getChildren().clear(); // Bersihkan konten lama
-            contentPane.getChildren().add(content); // Tambahkan konten baru
+            // Secara dinamis tetapkan MainLayoutController jika tersedia
+            if (controller != null && controller instanceof MainLayoutAware) {
+                ((MainLayoutAware) controller).setMainLayoutController(this);
+                System.out.println("[INFO] MainLayoutController berhasil diatur untuk controller: " + controller.getClass().getName());
+            }
+
+            // Bersihkan konten lama dan tambahkan konten baru
+            contentPane.getChildren().clear();
+            contentPane.getChildren().add(content);
 
             System.out.println("[INFO] Halaman konten berhasil dimuat: " + fxmlPath);
         } catch (IOException e) {
@@ -59,6 +72,7 @@ public class MainLayoutController {
             e.printStackTrace();
         }
     }
+
 
 
 

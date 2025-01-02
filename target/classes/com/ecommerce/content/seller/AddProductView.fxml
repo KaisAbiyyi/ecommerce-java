@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<StackPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ecommerce.content.seller.AddProductController">
+    <children>
+        <VBox alignment="TOP_CENTER" spacing="20.0" style="-fx-padding: 40; -fx-background-color: white;" StackPane.alignment="CENTER"> <!-- Padding untuk semua sisi -->
+
+            <!-- Navigation Bar -->
+            <HBox alignment="CENTER_LEFT" style="-fx-padding: 10px;">
+                <Button fx:id="profileButton" style="-fx-background-color: white; -fx-text-fill: #31D0AA; -fx-border-color: #31D0AA; -fx-border-width: 2; -fx-border-radius: 25 0 0 25; -fx-background-radius: 25 0 0 25; -fx-font-weight: 900;" text="Profile">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+               <padding>
+                  <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
+               </padding></Button>
+                <Button fx:id="productsButton" style="-fx-background-color: white; -fx-text-fill: #31D0AA; -fx-border-color: #31D0AA; -fx-background-radius: 0 0 0 0; -fx-border-radius: 0 0 0 0; -fx-border-width: 2 0 2 0; -fx-font-weight: 900;" text="Products">
+               <padding>
+                  <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
+               </padding>
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font></Button>
+                <Button fx:id="ordersButton" style="-fx-background-color: white; -fx-text-fill: #31D0AA; -fx-border-color: #31D0AA; -fx-border-width: 2; -fx-background-radius: 0 25 25 0; -fx-border-radius: 0 25 25 0; -fx-font-weight: 900;" text="Orders">
+               <padding>
+                  <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
+               </padding>
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font></Button>
+            </HBox>
+
+            <!-- Add Product Section -->
+            <VBox alignment="CENTER_LEFT" spacing="20.0" style="-fx-padding: 20; -fx-background-color: #FFFFFF; -fx-border-width: 1;">
+                <!-- Title -->
+                <Text style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Add Product">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font></Text>
+
+                <!-- Form -->
+                <VBox alignment="CENTER_LEFT" spacing="15.0">
+                    <!-- Name Field -->
+                    <VBox spacing="5.0">
+                        <Label text="Product Name:" />
+                        <TextField fx:id="productNameInput" prefHeight="48.0" prefWidth="800.0" promptText="Enter product name" style="-fx-background-radius: 25;">
+                            <padding>
+                                <Insets bottom="13.0" left="16.0" right="16.0" top="13.0" />
+                            </padding>
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </TextField>
+                    </VBox>
+
+                    <!-- Description Field -->
+                    <VBox spacing="5.0">
+                        <Label text="Description:" />
+                        <TextField fx:id="productDescriptionInput" prefHeight="48.0" prefWidth="800.0" promptText="Enter product description" style="-fx-background-radius: 25;">
+                            <padding>
+                                <Insets bottom="13.0" left="16.0" right="16.0" top="13.0" />
+                            </padding>
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </TextField>
+                    </VBox>
+
+                    <!-- Price Field -->
+                    <VBox spacing="5.0">
+                        <Label text="Price:" />
+                        <TextField fx:id="productPriceInput" prefHeight="48.0" prefWidth="800.0" promptText="Enter product price" style="-fx-background-radius: 25;">
+                            <padding>
+                                <Insets bottom="13.0" left="16.0" right="16.0" top="13.0" />
+                            </padding>
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </TextField>
+                    </VBox>
+
+                    <!-- Stock Field -->
+                    <VBox spacing="5.0">
+                        <Label text="Stock:" />
+                        <TextField fx:id="productStockInput" prefHeight="48.0" prefWidth="800.0" promptText="Enter product stock" style="-fx-background-radius: 25;">
+                            <padding>
+                                <Insets bottom="13.0" left="16.0" right="16.0" top="13.0" />
+                            </padding>
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </TextField>
+                    </VBox>
+
+                    <!-- Category Select Field -->
+                    <VBox spacing="5.0">
+                        <Label text="Category:" />
+                        <ComboBox fx:id="categorySelect" prefHeight="48.0" prefWidth="1300.0" promptText="Select category" style="-fx-background-radius: 25; -fx-background-color: #fff; -fx-border-color: #F2F4F8; -fx-border-radius: 25; -fx-border-width: 2;">
+                            <padding>
+                                <Insets bottom="13.0" left="16.0" right="16.0" top="13.0" />
+                            </padding>
+                        </ComboBox>
+                    </VBox>
+
+                    <!-- Image Upload Section -->
+                    <VBox spacing="5.0">
+                        <Label text="Upload Image:" />
+                        <VBox alignment="CENTER_LEFT" spacing="10.0">
+                            <ImageView fx:id="productImageView" fitHeight="100.0" fitWidth="100.0" style="-fx-border-color: lightgray; -fx-border-width: 2;" />
+                            <Button fx:id="uploadButton" style="-fx-background-color: #31D0AA; -fx-text-fill: white; -fx-background-radius: 25; -fx-font-weight: 900;" text="Upload">
+                        <font>
+                           <Font name="System Bold" size="16.0" />
+                        </font>
+                        <padding>
+                           <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
+                        </padding></Button>
+                        </VBox>
+                    </VBox>
+
+                    <!-- Submit Button -->
+                    <Button fx:id="submitButton" prefHeight="25.0" prefWidth="1300.0" style="-fx-background-color: #31D0AA; -fx-text-fill: white; -fx-background-radius: 25; -fx-font-weight: 900;" text="Add Product">
+                  <padding>
+                     <Insets bottom="10.0" left="25.0" right="25.0" top="10.0" />
+                  </padding>
+                  <font>
+                     <Font name="System Bold" size="16.0" />
+                  </font></Button>
+                </VBox>
+            </VBox>
+
+        </VBox>
+    </children>
+</StackPane>

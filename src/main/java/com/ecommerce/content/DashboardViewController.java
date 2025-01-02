@@ -6,7 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.StackPane;
 
-public class DashboardViewController {
+public class DashboardViewController implements MainLayoutController.MainLayoutAware {
 
     @FXML
     private StackPane contentPane; // Kontainer untuk konten dinamis di Dashboard

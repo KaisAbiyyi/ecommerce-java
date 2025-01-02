@@ -98,6 +98,24 @@ public class ProductDAOImpl implements ProductDAO {
     }
 
     @Override
+    public boolean isProductExists(int id) {
+        String sql = "SELECT COUNT(*) FROM products WHERE id = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, id);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error checking product existence: " + e.getMessage());
+        }
+        return false;
+    }
+
+
+    @Override
     public List<Product> getProductsByCategory(int categoryId) {
         List<Product> products = new ArrayList<>();
         String sql = "SELECT * FROM products WHERE category_id = ?";

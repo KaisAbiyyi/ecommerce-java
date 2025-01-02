@@ -6,7 +6,7 @@
 <?import javafx.scene.control.FileChooser?>
 
 <VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1"
-    fx:controller="com.ecommerce.customer.CheckoutController" spacing="10" alignment="CENTER">
+      fx:controller="com.ecommerce.content.customer.CheckoutController" spacing="10" alignment="CENTER">
     <Label text="Upload Proof of Transfer" />
     <Button text="Choose File" fx:id="uploadButton" />
     <Button text="Confirm Checkout" fx:id="confirmButton" />

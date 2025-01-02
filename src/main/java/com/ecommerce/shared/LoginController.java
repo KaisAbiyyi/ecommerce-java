@@ -6,6 +6,7 @@ import java.sql.Connection;
 import com.ecommerce.App;
 import com.ecommerce.dao.UserDAO;
 import com.ecommerce.dao.impl.UserDAOImpl;
+import com.ecommerce.layouts.NavbarController;
 import com.ecommerce.models.User;
 import com.ecommerce.utils.DatabaseUtils;
 import com.ecommerce.utils.LocalStorageUtils;
@@ -156,8 +157,20 @@ public class LoginController {
                 throw new IllegalStateException("[ERROR] MainLayoutController tidak ditemukan.");
             }
 
-            // Muat ulang konten dashboard
-            App.mainLayoutController.loadContent("/com/ecommerce/content/DashboardView.fxml");
+            // Dapatkan path dashboard berdasarkan role
+            String dashboardPath = App.getDashboardPath(role);
+
+            // Muat konten dashboard
+            App.mainLayoutController.loadContent(dashboardPath);
+
+            // Tambahkan ke stack navigasi melalui NavbarController
+            NavbarController navbarController = App.mainLayoutController.getNavbarController();
+            if (navbarController != null) {
+                navbarController.addPageToStack(dashboardPath, null);
+                System.out.println("[INFO] Halaman dashboard ditambahkan ke stack navigasi.");
+            } else {
+                System.err.println("[WARN] NavbarController belum diinisialisasi.");
+            }
 
             System.out.println("[INFO] Dashboard berhasil dimuat untuk role: " + role);
         } catch (Exception e) {
@@ -166,22 +179,11 @@ public class LoginController {
         }
     }
 
+
     private void updateNavbarAfterLogin() {
         if (App.mainLayoutController != null && App.mainLayoutController.getNavbarController() != null) {
             App.mainLayoutController.getNavbarController().updateAuthButtonState(true); // Set tombol Logout
             System.out.println("[INFO] Navbar diperbarui setelah login.");
-        }
-    }
-    public void navigateToLogin() {
-        try {
-            System.out.println("[INFO] Navigasi ke halaman login.");
-
-            if (App.mainLayoutController != null) {
-                App.mainLayoutController.loadContent("/com/ecommerce/shared/LoginView.fxml");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert("Error", "Tidak dapat membuka halaman login.");
         }
     }
 

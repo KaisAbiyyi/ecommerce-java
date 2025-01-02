@@ -4,6 +4,8 @@ import com.ecommerce.App;
 import com.ecommerce.content.ProductDetailViewController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 
 import java.util.Map;
 import java.util.Stack;
@@ -19,9 +21,66 @@ public class NavbarController {
 
     @FXML
     private Button authButton;
+    @FXML
+    private Button roleButton;
+    private String userRole;
+
     /**
      * Mengatur referensi ke MainLayoutController.
      */
+
+    @FXML
+    private void initialize() {
+        System.out.println("[INFO] NavbarController diinisialisasi.");
+
+        // Periksa status login
+        boolean isLoggedIn = App.loggedInUser != null;
+        updateAuthButtonState(isLoggedIn);
+
+        if (isLoggedIn) {
+            String userRole = App.loggedInUser.getRole().name().toUpperCase();
+
+            if ("ADMIN".equals(userRole)) {
+                // Sembunyikan elemen navigasi dan hanya tampilkan teks "Toko Kami" serta tombol Logout
+                toggleNavigationVisibility(false);
+                toggleRoleButtonVisibility(false);
+            } else {
+                // Jika bukan admin, tampilkan semua elemen navigasi
+                toggleNavigationVisibility(true);
+                toggleRoleButtonVisibility(true);
+                setUserRole(userRole);
+            }
+        } else {
+            // Jika tidak login, tampilkan semua elemen
+            toggleNavigationVisibility(true);
+            toggleRoleButtonVisibility(true);
+        }
+    }
+
+
+
+    @FXML
+    private HBox navigationSection;
+
+    @FXML
+    private TextField searchField;
+
+    private void toggleNavigationVisibility(boolean isVisible) {
+        // Sembunyikan atau tampilkan tombol navigasi dan search field
+        navigationSection.setVisible(isVisible);
+        navigationSection.setManaged(isVisible);
+        searchField.setVisible(isVisible);
+        searchField.setManaged(isVisible);
+    }
+
+
+
+
+    public void toggleRoleButtonVisibility(boolean isVisible) {
+        roleButton.setVisible(isVisible);
+        roleButton.setManaged(isVisible); // Hilangkan atau tampilkan ruang tombol
+    }
+
 
     public static class PageState {
         private final String pagePath;
@@ -76,12 +135,18 @@ public class NavbarController {
                 System.out.println("[INFO] User belum login. Menampilkan tombol Login.");
                 authButton.setText("Login");
                 authButton.setOnAction(event -> goToLogin());
+                // Tampilkan semua elemen jika tidak login
+                toggleNavigationVisibility(true);
+                toggleRoleButtonVisibility(true);
             }
         } catch (Exception e) {
             System.err.println("[ERROR] Gagal memperbarui tombol autentikasi.");
             e.printStackTrace();
         }
     }
+
+
+
     private void goToLogin() {
         try {
             String loginPagePath = "/com/ecommerce/shared/LoginView.fxml";
@@ -99,6 +164,71 @@ public class NavbarController {
         }
     }
 
+    public void setUserRole(String userRole) {
+        if (App.loggedInUser == null) {
+            System.err.println("[ERROR] Tidak ada user login. Tombol role tidak diperbarui.");
+            return;
+        }
+
+        this.userRole = userRole.toLowerCase();
+
+        // Jika user adalah admin, sembunyikan tombol role
+        if ("admin".equals(this.userRole)) {
+            toggleRoleButtonVisibility(false); // Sembunyikan tombol role
+            toggleNavigationVisibility(false); // Sembunyikan elemen navigasi
+        } else {
+            toggleRoleButtonVisibility(true); // Tampilkan tombol role jika bukan admin
+            toggleNavigationVisibility(true); // Tampilkan elemen navigasi
+            updateRoleButton();
+        }
+    }
+
+
+
+    private void updateRoleButton() {
+        if ("seller".equals(userRole)) {
+            roleButton.setText("Products");
+            roleButton.setStyle("-fx-background-color: #31D0AA; -fx-text-fill: white; -fx-font-weight: 900;");
+            roleButton.setOnAction(event -> goToManageProducts());
+            System.out.println("[INFO] Role Seller: Tombol diatur ke 'Products'.");
+        } else if ("customer".equals(userRole)) {
+            roleButton.setText("Profile");
+            roleButton.setStyle("-fx-background-color: #31D0AA; -fx-text-fill: white; -fx-font-weight: 900;");
+            roleButton.setOnAction(event -> goToManageProfile());
+            System.out.println("[INFO] Role Customer: Tombol diatur ke 'Profile'.");
+        } else {
+            roleButton.setText("Unknown");
+            roleButton.setDisable(true);
+            System.err.println("[WARN] Role tidak dikenal: Tombol dinonaktifkan.");
+        }
+    }
+
+
+    @FXML
+    public void goToManageProducts() {
+        try {
+            String manageProductsPagePath = "/com/ecommerce/content/seller/ManageProductsView.fxml";
+            addPageToStack(manageProductsPagePath, null);
+            mainLayoutController.loadContent(manageProductsPagePath);
+            System.out.println("[INFO] Navigasi ke halaman Manage Products.");
+        } catch (Exception e) {
+            System.err.println("[ERROR] Gagal membuka halaman Manage Products.");
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void goToManageProfile() {
+        try {
+            String manageProfilePagePath = "/com/ecommerce/content/ProfileView.fxml";
+            addPageToStack(manageProfilePagePath, null);
+            mainLayoutController.loadContent(manageProfilePagePath);
+            System.out.println("[INFO] Navigasi ke halaman Manage Profile.");
+        } catch (Exception e) {
+            System.err.println("[ERROR] Gagal membuka halaman Manage Profile.");
+            e.printStackTrace();
+        }
+    }
 
 
     public void addPageToStack(String page, Object additionalData) {
@@ -143,9 +273,15 @@ public class NavbarController {
     @FXML
     public void handleLogout() {
         try {
+            updateAuthButtonState(false);
             System.out.println("[INFO] Logout button clicked. Logging out...");
             clearNavigationStacks(); // Bersihkan stack navigasi
             App.logout();
+
+            // Kembalikan elemen navigasi dan tombol role agar terlihat
+            toggleNavigationVisibility(true);
+            toggleRoleButtonVisibility(true);
+
             goToLogin(); // Navigasi ke halaman login
             System.out.println("[INFO] Logout berhasil. Redirect ke halaman login.");
         } catch (Exception e) {

@@ -16,7 +16,7 @@ import java.sql.ResultSet;
 /**
  * Controller untuk menampilkan detail produk.
  */
-public class ProductDetailViewController {
+public class ProductDetailViewController implements MainLayoutController.MainLayoutAware {
 
     @FXML
     private ImageView productImageView;
