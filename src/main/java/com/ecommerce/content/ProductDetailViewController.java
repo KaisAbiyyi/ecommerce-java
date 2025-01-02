@@ -1,7 +1,8 @@
 package com.ecommerce.content;
 
-import com.ecommerce.customer.CartController;
+import com.ecommerce.App;
 import com.ecommerce.layouts.MainLayoutController;
+import com.ecommerce.layouts.NavbarController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -9,15 +10,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import com.ecommerce.utils.DatabaseUtils;
+import javafx.scene.control.Alert;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
+import java.util.Map;
 
 /**
  * Controller untuk menampilkan detail produk.
  */
-public class ProductDetailViewController {
+public class ProductDetailViewController implements MainLayoutController.MainLayoutAware {
 
     @FXML
     private ImageView productImageView;
@@ -186,24 +187,164 @@ public class ProductDetailViewController {
     private void handleAddToCart() {
         System.out.println("[INFO] Add to Cart ditekan untuk produk ID: " + productId);
 
-        if (mainLayoutController != null) {
-            CartController cartController = mainLayoutController.getCartController();
+        if (App.loggedInUser == null) {
+            System.err.println("[ERROR] Tidak ada pengguna yang sedang login. Tidak dapat melanjutkan.");
+            return;
+        }
 
-            if (cartController != null) {
-                try {
-                    int quantity = Integer.parseInt(quantityField.getText());
-                    cartController.addItemToCart(productNameLabel.getText(), productPrice, quantity);
-                    System.out.println("[INFO] Produk berhasil ditambahkan ke keranjang: " + productNameLabel.getText());
-                } catch (NumberFormatException e) {
-                    System.err.println("[ERROR] Input jumlah tidak valid.");
-                }
-            } else {
-                System.err.println("[ERROR] CartController tidak ditemukan.");
+        int userId = App.loggedInUser.getId();
+
+        try (Connection connection = DatabaseUtils.getConnection()) {
+            connection.setAutoCommit(false); // Mulai transaksi
+
+            int sellerId = getSellerIdByProductId(connection, productId);
+
+            // Ambil jumlah stok yang tersedia
+            int availableStock = getAvailableStock(connection, productId);
+            int quantity = Integer.parseInt(quantityField.getText());
+
+            if (quantity > availableStock) {
+                System.err.println("[ERROR] Jumlah stok yang diminta melebihi stok yang tersedia. Stok tersedia: " + availableStock);
+
+                // Tampilkan alert jika jumlah stok melebihi
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Peringatan Stok");
+                alert.setHeaderText("Stok Tidak Mencukupi");
+                alert.setContentText("Jumlah stok yang diminta melebihi stok yang tersedia. Stok tersedia: " + availableStock);
+                alert.showAndWait();
+                return;
             }
-        } else {
-            System.err.println("[ERROR] MainLayoutController tidak diatur.");
+
+            // Periksa apakah cart_seller untuk kombinasi user dan seller sudah ada
+            int cartSellerId = getOrCreateCartSeller(connection, userId, sellerId);
+
+            // Tambahkan atau perbarui item ke cart_items
+            addOrUpdateCartItem(connection, cartSellerId, productId, quantity);
+
+            connection.commit(); // Selesaikan transaksi
+
+            // Navigasi ke halaman CartView
+            String cartViewPath = "/com/ecommerce/content/customer/CartView.fxml";
+            NavbarController navbarController = App.mainLayoutController.getNavbarController();
+            if (navbarController != null) {
+                navbarController.addPageToStack(cartViewPath, Map.of(
+                        "productName", productNameLabel.getText(),
+                        "productPrice", String.valueOf(productPrice),
+                        "quantity", String.valueOf(quantity)
+                ));
+            }
+
+            App.mainLayoutController.loadContent(cartViewPath);
+            System.out.println("[INFO] Navigasi ke halaman CartView berhasil.");
+        } catch (NumberFormatException e) {
+            System.err.println("[ERROR] Input jumlah tidak valid.");
+
+            // Tampilkan alert jika input tidak valid
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Kesalahan Input");
+            alert.setHeaderText("Jumlah Tidak Valid");
+            alert.setContentText("Harap masukkan jumlah barang yang valid.");
+            alert.showAndWait();
+        } catch (Exception e) {
+            System.err.println("[ERROR] Gagal melakukan proses input ke tabel atau navigasi ke CartView:");
+            e.printStackTrace();
         }
     }
+
+
+
+    private int getSellerIdByProductId(Connection connection, int productId) throws SQLException {
+        String query = "SELECT seller_id FROM products WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, productId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("seller_id");
+                } else {
+                    throw new SQLException("Produk dengan ID " + productId + " tidak ditemukan.");
+                }
+            }
+        }
+    }
+
+
+    private int getAvailableStock(Connection connection, int productId) throws Exception {
+        String query = "SELECT stock FROM products WHERE id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, productId);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("stock");
+                } else {
+                    throw new Exception("[ERROR] Produk dengan ID " + productId + " tidak ditemukan.");
+                }
+            }
+        }
+    }
+
+
+    private int getOrCreateCartSeller(Connection connection, int userId, int sellerId) throws SQLException {
+        String selectQuery = "SELECT id FROM cart_sellers WHERE user_id = ? AND seller_id = ?";
+        try (PreparedStatement selectStmt = connection.prepareStatement(selectQuery)) {
+            selectStmt.setInt(1, userId);
+            selectStmt.setInt(2, sellerId);
+            try (ResultSet resultSet = selectStmt.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("id");
+                }
+            }
+        }
+
+        String insertQuery = "INSERT INTO cart_sellers (user_id, seller_id) VALUES (?, ?)";
+        try (PreparedStatement insertStmt = connection.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)) {
+            insertStmt.setInt(1, userId);
+            insertStmt.setInt(2, sellerId);
+            insertStmt.executeUpdate();
+            try (ResultSet generatedKeys = insertStmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("Gagal membuat entri baru di cart_sellers.");
+                }
+            }
+        }
+    }
+
+
+    private void addOrUpdateCartItem(Connection connection, int cartSellerId, int productId, int quantity) throws SQLException {
+        String selectQuery = "SELECT id, quantity FROM cart_items WHERE cart_seller_id = ? AND product_id = ?";
+        try (PreparedStatement selectStmt = connection.prepareStatement(selectQuery)) {
+            selectStmt.setInt(1, cartSellerId);
+            selectStmt.setInt(2, productId);
+            try (ResultSet resultSet = selectStmt.executeQuery()) {
+                if (resultSet.next()) {
+                    // Update quantity jika item sudah ada
+                    int existingQuantity = resultSet.getInt("quantity");
+                    int newQuantity = existingQuantity + quantity;
+
+                    String updateQuery = "UPDATE cart_items SET quantity = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?";
+                    try (PreparedStatement updateStmt = connection.prepareStatement(updateQuery)) {
+                        updateStmt.setInt(1, newQuantity);
+                        updateStmt.setInt(2, resultSet.getInt("id"));
+                        updateStmt.executeUpdate();
+                    }
+                } else {
+                    // Tambahkan item baru jika belum ada
+                    String insertQuery = "INSERT INTO cart_items (cart_seller_id, product_id, quantity) VALUES (?, ?, ?)";
+                    try (PreparedStatement insertStmt = connection.prepareStatement(insertQuery)) {
+                        insertStmt.setInt(1, cartSellerId);
+                        insertStmt.setInt(2, productId);
+                        insertStmt.setInt(3, quantity);
+                        insertStmt.executeUpdate();
+                    }
+                }
+            }
+        }
+    }
+
+
 
 
     /**

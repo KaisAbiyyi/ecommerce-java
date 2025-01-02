@@ -91,4 +91,6 @@ public interface ProductDAO {
      * @return Daftar produk dengan stok rendah.
      */
     List<Product> getLowStockProducts(int threshold);
+
+    public boolean isProductExists(int id);
 }

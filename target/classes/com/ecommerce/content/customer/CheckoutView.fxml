@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ecommerce.content.customer.CheckoutController" style="-fx-padding: 20;">
+    <children>
+        <VBox spacing="20" alignment="TOP_CENTER" style="-fx-padding: 20;">
+            <!-- Header -->
+            <Label text="Checkout Overview" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+
+            <!-- Order Details -->
+            <VBox fx:id="orderDetailsContainer" spacing="10" />
+
+            <!-- Total Price -->
+            <Label fx:id="totalPriceLabel" text="Total: Rp0.00" style="-fx-font-size: 16px;" />
+
+            <!-- File Input for Proof of Payment -->
+            <VBox spacing="10" alignment="CENTER">
+                <Label text="Upload Proof of Payment:" style="-fx-font-size: 14px;" />
+                <Button fx:id="uploadProofButton" text="Upload File" style="-fx-background-color: #64B5F6; -fx-text-fill: white;" onAction="#handleFileUpload" />
+                <Label fx:id="fileNameLabel" text="No file selected" style="-fx-font-size: 12px;" />
+            </VBox>
+
+            <!-- Confirm Button -->
+            <Button text="Confirm Payment" fx:id="confirmPaymentButton" style="-fx-background-color: #31D0AA; -fx-text-fill: white;" />
+        </VBox>
+    </children>
+</StackPane>
+

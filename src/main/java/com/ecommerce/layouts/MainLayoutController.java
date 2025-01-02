@@ -1,6 +1,5 @@
 package com.ecommerce.layouts;
 
-import com.ecommerce.customer.CartController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,14 +10,11 @@ import java.io.IOException;
 public class MainLayoutController {
 
     @FXML
-    private StackPane contentPane; // Tempat untuk memuat konten halaman
+    private StackPane contentPane;
 
-    private Object currentController; // Referensi controller halaman saat ini
-
-    private CartController cartController; // Referensi ke CartController
-
+    private Object currentController;
     @FXML
-    private NavbarController navbarController; // Referensi ke NavbarController
+    private NavbarController navbarController;
 
     /**
      * Inisialisasi MainLayoutController.
@@ -26,18 +22,6 @@ public class MainLayoutController {
     @FXML
     public void initialize() {
         System.out.println("[INFO] MainLayoutController diinisialisasi.");
-
-        // Preload CartView untuk memastikan CartController siap digunakan
-        try {
-            System.out.println("[DEBUG] Preloading CartView...");
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ecommerce/customer/CartView.fxml"));
-            loader.load();
-            cartController = loader.getController();
-            System.out.println("[INFO] CartController berhasil di-preload.");
-        } catch (IOException e) {
-            System.err.println("[ERROR] Gagal preload CartView:");
-            e.printStackTrace();
-        }
 
         // Hubungkan NavbarController dengan MainLayoutController
         if (navbarController != null) {
@@ -48,11 +32,17 @@ public class MainLayoutController {
         }
     }
 
+    public interface MainLayoutAware {
+        void setMainLayoutController(MainLayoutController mainLayoutController);
+    }
+
+
     /**
      * Memuat halaman konten dinamis ke dalam contentPane.
      *
      * @param fxmlPath Path file FXML yang ingin dimuat.
      */
+
     public void loadContent(String fxmlPath) {
         try {
             System.out.println("[DEBUG] Memulai proses memuat halaman: " + fxmlPath);
@@ -60,19 +50,13 @@ public class MainLayoutController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent content = loader.load();
 
-            // Simpan referensi controller halaman yang baru dimuat
-            currentController = loader.getController();
+            Object controller = loader.getController(); // Simpan referensi controller
+            currentController = controller; // Tetapkan controller ke variabel global jika diperlukan
 
-            // Jika halaman yang dimuat adalah CartView, simpan referensi ke CartController
-            if (currentController instanceof CartController) {
-                cartController = (CartController) currentController;
-                System.out.println("[INFO] CartController berhasil diatur.");
-            }
-
-            // Jika halaman yang dimuat adalah ProductDetailView, set MainLayoutController
-            if (currentController instanceof com.ecommerce.content.ProductDetailViewController) {
-                ((com.ecommerce.content.ProductDetailViewController) currentController).setMainLayoutController(this);
-                System.out.println("[INFO] MainLayoutController berhasil diatur pada ProductDetailViewController.");
+            // Secara dinamis tetapkan MainLayoutController jika tersedia
+            if (controller != null && controller instanceof MainLayoutAware) {
+                ((MainLayoutAware) controller).setMainLayoutController(this);
+                System.out.println("[INFO] MainLayoutController berhasil diatur untuk controller: " + controller.getClass().getName());
             }
 
             // Bersihkan konten lama dan tambahkan konten baru
@@ -83,23 +67,20 @@ public class MainLayoutController {
         } catch (IOException e) {
             System.err.println("[ERROR] File FXML tidak ditemukan atau tidak dapat dimuat: " + fxmlPath);
             e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("[ERROR] Gagal memuat konten: " + fxmlPath);
+            e.printStackTrace();
         }
     }
 
-    /**
-     * Mengembalikan controller halaman yang sedang aktif.
-     *
-     * @return Referensi ke controller halaman aktif.
-     */
+
+
+
     public Object getCurrentController() {
         return currentController;
     }
 
-    /**
-     * Mengembalikan referensi ke NavbarController.
-     *
-     * @return Referensi ke NavbarController.
-     */
+
     public NavbarController getNavbarController() {
         if (navbarController != null) {
             return navbarController;
@@ -109,17 +90,4 @@ public class MainLayoutController {
         }
     }
 
-    /**
-     * Mengembalikan referensi ke CartController.
-     *
-     * @return Referensi ke CartController.
-     */
-    public CartController getCartController() {
-        if (cartController != null) {
-            System.out.println("[INFO] Mengembalikan referensi ke CartController.");
-        } else {
-            System.err.println("[WARN] CartController belum diinisialisasi.");
-        }
-        return cartController;
-    }
 }

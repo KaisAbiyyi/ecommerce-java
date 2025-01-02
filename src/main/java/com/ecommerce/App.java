@@ -15,12 +15,11 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.util.Map;
 
 public class App extends Application {
 
-    private static Stage primaryStage;
-    private static User loggedInUser;
+    public static Stage primaryStage;
+    public static User loggedInUser;
     public static MainLayoutController mainLayoutController;
 
     @Override
@@ -41,23 +40,39 @@ public class App extends Application {
 
         boolean isLoggedIn = isValidSession(token, role, userId);
 
-        // Cek status login dan tentukan halaman yang akan dimuat
+        String initialPage;
         if (isLoggedIn) {
             loggedInUser = getUserById(Integer.parseInt(userId));
             if (loggedInUser != null) {
-                mainLayoutController.loadContent(getDashboardPath(role)); // Tampilkan dashboard sesuai role
+                initialPage = getDashboardPath(role); // Path dashboard sesuai role
             } else {
                 isLoggedIn = false; // User tidak ditemukan, anggap belum login
-                mainLayoutController.loadContent("/com/ecommerce/content/DashboardView.fxml"); // Tampilkan dashboard default
+                initialPage = "/com/ecommerce/content/DashboardView.fxml"; // Dashboard default
             }
         } else {
-            mainLayoutController.loadContent("/com/ecommerce/content/DashboardView.fxml"); // Tampilkan dashboard default
+            initialPage = "/com/ecommerce/content/DashboardView.fxml"; // Dashboard default
         }
 
-        // Update tombol auth di NavbarController
-        if (mainLayoutController != null && mainLayoutController.getNavbarController() != null) {
-            NavbarController navbarController = mainLayoutController.getNavbarController();
-            navbarController.updateAuthButtonState(isLoggedIn); // Kirim status login ke tombol auth
+        // Load halaman awal ke MainLayout
+        mainLayoutController.loadContent(initialPage);
+
+        // Tambahkan halaman awal ke stack navigasi
+        NavbarController navbarController = mainLayoutController.getNavbarController();
+        if (navbarController != null) {
+            navbarController.addPageToStack(initialPage, null);
+
+            // Update tombol auth di NavbarController
+            navbarController.updateAuthButtonState(isLoggedIn);
+
+            // Set tombol role berdasarkan role user (jika user login)
+            if (isLoggedIn && role != null) {
+                navbarController.setUserRole(role); // Inisialisasi tombol Role Button
+                navbarController.toggleRoleButtonVisibility(true); // Pastikan tombol role terlihat
+                System.out.println("[INFO] Tombol role diatur sesuai dengan userRole: " + role);
+            } else {
+                navbarController.toggleRoleButtonVisibility(false); // Sembunyikan tombol jika tidak login
+                navbarController.setUserRole(null);
+            }
         } else {
             System.err.println("[WARN] NavbarController belum diinisialisasi.");
         }
@@ -65,14 +80,14 @@ public class App extends Application {
 
 
 
-    private static String getDashboardPath(String role) {
+    public static String getDashboardPath(String role) {
         switch (role.toUpperCase()) {
             case "ADMIN":
-                return "/com/ecommerce/admin/ManageUsersView.fxml";
+                return "/com/ecommerce/content/admin/SellerApprovalView.fxml";
             case "CUSTOMER":
                 return "/com/ecommerce/content/DashboardView.fxml";
             case "SELLER":
-                return "/com/ecommerce/seller/ManageProductsView.fxml";
+                return "/com/ecommerce/content/seller/ManageProductsView.fxml";
             default:
                 System.err.println("[ERROR] Role tidak dikenali: " + role);
                 return "/com/ecommerce/shared/LoginView.fxml";
@@ -144,41 +159,6 @@ public class App extends Application {
         return true;
     }
 
-    public void openLoginPage() {
-        try {
-            System.out.println("[INFO] Membuka halaman login.");
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/ecommerce/shared/LoginView.fxml"));
-            AnchorPane loginRoot = loader.load();
-
-            Scene loginScene = new Scene(loginRoot);
-            primaryStage.setScene(loginScene);
-            primaryStage.setTitle("Login - E-Commerce App");
-            primaryStage.show();
-
-            System.out.println("[INFO] Halaman login berhasil dimuat.");
-        } catch (Exception e) {
-            System.err.println("[ERROR] Gagal memuat halaman login.");
-            e.printStackTrace();
-        }
-    }
-
-    public static void openMainPage(String role) {
-        try {
-            if (mainLayoutController != null) {
-                String contentPath = getDashboardPath(role);
-                mainLayoutController.loadContent(contentPath);
-                System.out.println("[INFO] Main page berhasil dimuat untuk role: " + role);
-            } else {
-                throw new IllegalStateException("[ERROR] MainLayoutController tidak ditemukan.");
-            }
-        } catch (Exception e) {
-            System.err.println("[ERROR] Terjadi kesalahan saat membuka Main Page: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-
-
     private User getUserById(int userId) {
         System.out.println("[DEBUG] Mencoba mendapatkan user dengan ID: " + userId);
         try (Connection connection = DatabaseUtils.getConnection()) {
@@ -227,7 +207,14 @@ public class App extends Application {
                 System.out.println("[INFO] Detail user disimpan ke LocalStorage.");
 
                 if (mainLayoutController != null) {
-                    mainLayoutController.loadContent("/com/ecommerce/content/DashboardView.fxml");
+                    NavbarController navbarController = mainLayoutController.getNavbarController();
+                    if (navbarController != null) {
+                        navbarController.setUserRole(user.getRole().name());
+                        navbarController.toggleRoleButtonVisibility(true); // Pastikan tombol role terlihat
+                    } else {
+                        System.err.println("[WARN] NavbarController belum diinisialisasi.");
+                    }
+                    mainLayoutController.loadContent(getDashboardPath(user.getRole().name()));
                     System.out.println("[INFO] Dashboard berhasil dimuat setelah login.");
                 } else {
                     System.err.println("[WARN] MainLayoutController belum diinisialisasi. Dashboard tidak diperbarui.");
@@ -238,12 +225,21 @@ public class App extends Application {
                 LocalStorageUtils.remove("userRole");
                 LocalStorageUtils.remove("userId");
                 System.out.println("[INFO] User login direset. Semua session detail dihapus.");
+
+                if (mainLayoutController != null) {
+                    NavbarController navbarController = mainLayoutController.getNavbarController();
+                    if (navbarController != null) {
+                        navbarController.toggleRoleButtonVisibility(false); // Sembunyikan tombol role
+                    }
+                }
             }
         } catch (Exception e) {
             System.err.println("[ERROR] Terjadi kesalahan saat mengatur logged-in user:");
             e.printStackTrace();
         }
     }
+
+
 
 
     public static void main(String[] args) {
