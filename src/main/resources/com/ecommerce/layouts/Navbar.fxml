@@ -63,17 +63,6 @@
                 </HBox>
             </HBox>
 
-
-            <!-- Search Field -->
-            <TextField prefHeight="51.0" fx:id="searchField" prefWidth="704.0" promptText="Search For" style="-fx-background-radius: 25;">
-                <padding>
-                    <Insets bottom="13.0" left="16.0" right="16.0" top="13.0"/>
-                </padding>
-                <font>
-                    <Font size="16.0"/>
-                </font>
-            </TextField>
-
             <!-- Role Button (Products/Profile) -->
             <Button fx:id="roleButton" mnemonicParsing="false" prefHeight="48.0" prefWidth="96.0"
                     style="-fx-background-radius: 25; -fx-background-color: #31D0AA; -fx-text-fill: white; -fx-font-weight: 900;">

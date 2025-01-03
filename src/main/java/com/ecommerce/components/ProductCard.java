@@ -4,39 +4,48 @@ import com.ecommerce.App;
 import com.ecommerce.content.ProductDetailViewController;
 import com.ecommerce.layouts.MainLayoutController;
 import com.ecommerce.layouts.NavbarController;
-import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.util.Map;
 
-public class ProductCard extends CardBase {
+public class ProductCard extends VBox {
     private final int productId;
 
     public ProductCard(int productId, String productName, double productPrice, String imageUrl) {
-        super(380, 400, "#f9f9f9", "dropshadow(gaussian, rgba(0, 0, 0, 0.15), 8, 0, 2, 2)");
+        super(10); // Set spacing between child elements
         this.productId = productId;
 
-        // Add ImageView with object-cover behavior
-        ImageView imageView = createImageView(imageUrl);
-        getChildren().add(imageView);
+        // Set fixed size for the card
+        this.setPrefWidth(200);
+        this.setPrefHeight(300);
+        this.setPadding(new Insets(10));
+        this.setStyle("-fx-border-color: lightgray; -fx-border-width: 1; " +
+                "-fx-background-color: #FFFFFF; -fx-background-radius: 10; -fx-border-radius: 10;");
+        this.setAlignment(Pos.CENTER);
+
+        // Add product image
+        ImageView productImageView = createImageView(imageUrl);
+        this.getChildren().add(productImageView);
 
         // Add product name
-        addTitle(productName);
+        Text productNameText = new Text(productName);
+        productNameText.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #333;");
+        productNameText.setWrappingWidth(180); // Allow wrapping within the card width
+        this.getChildren().add(productNameText);
 
         // Add product price
-        Text priceText = new Text("Rp" + String.format("%,.0f", productPrice));
-        priceText.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #4d5358;");
-        getChildren().add(priceText);
+        Text productPriceText = new Text("Rp" + String.format("%,.0f", productPrice));
+        productPriceText.setStyle("-fx-font-size: 14px; -fx-text-fill: #666;");
+        this.getChildren().add(productPriceText);
 
-        // Add click event
+        // Add click event for navigation
         this.setOnMouseClicked(this::handleClick);
     }
 
@@ -50,15 +59,15 @@ public class ProductCard extends CardBase {
         }
 
         ImageView imageView = new ImageView(image);
-        imageView.setFitWidth(350); // Set fixed width
-        imageView.setFitHeight(300); // Set fixed height
-        imageView.setPreserveRatio(false); // Disable ratio preservation
+        imageView.setFitWidth(180); // Fixed width for the image
+        imageView.setFitHeight(180); // Fixed height for the image
+        imageView.setPreserveRatio(false); // Disable preserve ratio for object-cover behavior
 
-        // Apply object-cover behavior using viewport
+        // Apply object-cover behavior
         double imageWidth = image.getWidth();
         double imageHeight = image.getHeight();
         double aspectRatioImage = imageWidth / imageHeight;
-        double aspectRatioContainer = 350.0 / 250.0;
+        double aspectRatioContainer = 180.0 / 180.0;
 
         if (aspectRatioImage > aspectRatioContainer) {
             double newWidth = imageHeight * aspectRatioContainer;
@@ -80,41 +89,34 @@ public class ProductCard extends CardBase {
 
     private void navigateToProductDetail() {
         try {
-            // Pastikan MainLayoutController tersedia
             if (App.mainLayoutController != null) {
-                // Tambahkan halaman ke stack navigasi
+                // Add page to the navigation stack
                 NavbarController navbarController = App.mainLayoutController.getNavbarController();
                 if (navbarController != null) {
-                    // Tambahkan halaman dengan data tambahan (ID produk)
                     navbarController.addPageToStack(
                             "/com/ecommerce/content/ProductDetailView.fxml",
-                            Map.of("productId", productId) // Data tambahan: ID produk
+                            Map.of("productId", productId)
                     );
                 }
 
-                // Muat konten menggunakan MainLayoutController
+                // Load product detail view
                 App.mainLayoutController.loadContent("/com/ecommerce/content/ProductDetailView.fxml");
 
-                // Dapatkan controller dari konten yang dimuat
+                // Pass product ID to the ProductDetailViewController
                 ProductDetailViewController controller =
                         (ProductDetailViewController) App.mainLayoutController.getCurrentController();
-
-                // Pastikan controller berhasil diambil dan set ID produk
                 if (controller != null) {
-                    controller.setProductId(productId); // Tetapkan ID produk
-                    System.out.println("[INFO] Berhasil navigasi ke detail produk dengan ID: " + productId);
+                    controller.setProductId(productId);
+                    System.out.println("[INFO] Navigated to product detail view for product ID: " + productId);
                 } else {
-                    System.err.println("[ERROR] Gagal mendapatkan controller ProductDetailViewController.");
+                    System.err.println("[ERROR] Failed to get ProductDetailViewController.");
                 }
             } else {
-                System.err.println("[ERROR] MainLayoutController tidak ditemukan. Pastikan layout utama telah diatur dengan benar.");
+                System.err.println("[ERROR] MainLayoutController is not set.");
             }
         } catch (Exception e) {
-            System.err.println("[ERROR] Terjadi kesalahan saat navigasi ke detail produk.");
+            System.err.println("[ERROR] An error occurred while navigating to product detail:");
             e.printStackTrace();
         }
     }
-
-
-
 }

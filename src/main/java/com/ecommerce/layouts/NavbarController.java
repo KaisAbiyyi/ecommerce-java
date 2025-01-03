@@ -62,15 +62,11 @@ public class NavbarController {
     @FXML
     private HBox navigationSection;
 
-    @FXML
-    private TextField searchField;
 
     private void toggleNavigationVisibility(boolean isVisible) {
-        // Sembunyikan atau tampilkan tombol navigasi dan search field
+        // Sembunyikan atau tampilkan tombol navigasi
         navigationSection.setVisible(isVisible);
         navigationSection.setManaged(isVisible);
-        searchField.setVisible(isVisible);
-        searchField.setManaged(isVisible);
     }
 
 
