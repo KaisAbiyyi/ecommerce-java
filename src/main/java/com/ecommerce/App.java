@@ -1,11 +1,11 @@
 package com.ecommerce;
 
-import com.ecommerce.dao.UserDAO;
-import com.ecommerce.dao.impl.UserDAOImpl;
+import com.ecommerce.db.dao.UserDAO;
+import com.ecommerce.db.dao.impl.UserDAOImpl;
 import com.ecommerce.layouts.MainLayoutController;
 import com.ecommerce.layouts.NavbarController;
-import com.ecommerce.models.User;
-import com.ecommerce.utils.DatabaseUtils;
+import com.ecommerce.db.models.User;
+import com.ecommerce.db.DatabaseUtils;
 import com.ecommerce.utils.LocalStorageUtils;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -66,11 +66,9 @@ public class App extends Application {
 
             // Set tombol role berdasarkan role user (jika user login)
             if (isLoggedIn && role != null) {
-                navbarController.setUserRole(role); // Inisialisasi tombol Role Button
-                navbarController.toggleRoleButtonVisibility(true); // Pastikan tombol role terlihat
+                navbarController.setUserRole(role); ; // Pastikan tombol role terlihat
                 System.out.println("[INFO] Tombol role diatur sesuai dengan userRole: " + role);
             } else {
-                navbarController.toggleRoleButtonVisibility(false); // Sembunyikan tombol jika tidak login
                 navbarController.setUserRole(null);
             }
         } else {
@@ -90,7 +88,7 @@ public class App extends Application {
                 return "/com/ecommerce/content/seller/ManageProductsView.fxml";
             default:
                 System.err.println("[ERROR] Role tidak dikenali: " + role);
-                return "/com/ecommerce/shared/LoginView.fxml";
+                return "/com/ecommerce/content/LoginView.fxml";
         }
     }
 
@@ -186,7 +184,7 @@ public class App extends Application {
             loggedInUser = null;
             System.out.println("[INFO] Logout berhasil. Menampilkan halaman login.");
             if (mainLayoutController != null) {
-                mainLayoutController.loadContent("/com/ecommerce/shared/LoginView.fxml");
+                mainLayoutController.loadContent("/com/ecommerce/content/LoginView.fxml");
             }
         } catch (Exception e) {
             System.err.println("[ERROR] Error logout: " + e.getMessage());
@@ -210,7 +208,6 @@ public class App extends Application {
                     NavbarController navbarController = mainLayoutController.getNavbarController();
                     if (navbarController != null) {
                         navbarController.setUserRole(user.getRole().name());
-                        navbarController.toggleRoleButtonVisibility(true); // Pastikan tombol role terlihat
                     } else {
                         System.err.println("[WARN] NavbarController belum diinisialisasi.");
                     }
@@ -225,13 +222,6 @@ public class App extends Application {
                 LocalStorageUtils.remove("userRole");
                 LocalStorageUtils.remove("userId");
                 System.out.println("[INFO] User login direset. Semua session detail dihapus.");
-
-                if (mainLayoutController != null) {
-                    NavbarController navbarController = mainLayoutController.getNavbarController();
-                    if (navbarController != null) {
-                        navbarController.toggleRoleButtonVisibility(false); // Sembunyikan tombol role
-                    }
-                }
             }
         } catch (Exception e) {
             System.err.println("[ERROR] Terjadi kesalahan saat mengatur logged-in user:");

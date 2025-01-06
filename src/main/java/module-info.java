@@ -6,8 +6,6 @@ module com.ecommerce {
     requires jbcrypt; // Untuk hashing password
 
     // Membuka package FXML agar dapat diakses oleh FXMLLoader
-    opens com.ecommerce.shared to javafx.fxml;
-    opens com.ecommerce.product to javafx.fxml;
     opens com.ecommerce.utils to javafx.fxml; // Jika utilitas Anda membutuhkan akses FXML
 
     // Mengekspor package agar dapat diimpor dari modul eksternal
@@ -18,4 +16,7 @@ module com.ecommerce {
     opens com.ecommerce.content.seller to javafx.fxml; // Hanya jika utils dipakai di luar modul ini
     opens com.ecommerce.content.admin to javafx.fxml; // Hanya jika utils dipakai di luar modul ini
     opens com.ecommerce.content.customer to javafx.fxml;
+    opens com.ecommerce.content.product to javafx.fxml;
+    exports com.ecommerce.db;
+    opens com.ecommerce.db to javafx.fxml;
 }

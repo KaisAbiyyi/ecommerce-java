@@ -1,7 +1,7 @@
 package com.ecommerce.content.admin;
 
 import com.ecommerce.layouts.MainLayoutController;
-import com.ecommerce.utils.DatabaseUtils;
+import com.ecommerce.db.DatabaseUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;

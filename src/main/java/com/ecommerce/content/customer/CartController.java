@@ -1,14 +1,18 @@
 package com.ecommerce.content.customer;
 
 import com.ecommerce.App;
+import com.ecommerce.db.models.User;
 import com.ecommerce.layouts.MainLayoutController;
 import com.ecommerce.layouts.NavbarController;
-import com.ecommerce.utils.DatabaseUtils;
+import com.ecommerce.db.DatabaseUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -27,6 +31,12 @@ public class CartController implements MainLayoutController.MainLayoutAware {
 
     @FXML
     private Button checkoutButton;
+
+    @FXML
+    private Button checkoutButtonNav;
+
+    @FXML
+    private Button productsButton;
 
     @FXML
     private Button profileButton;
@@ -57,7 +67,7 @@ public class CartController implements MainLayoutController.MainLayoutAware {
     @FXML
     private void initialize() {
         System.out.println("[INFO] CartController diinisialisasi.");
-
+        User loggedInUser = App.loggedInUser;
         setupNavigationButtons();
 
         if (mainLayoutController == null) {
@@ -65,7 +75,10 @@ public class CartController implements MainLayoutController.MainLayoutAware {
         }
 
         loadCartItems();
-
+        if (!("SELLER".equalsIgnoreCase(loggedInUser.getRole().name()))) {
+            productsButton.setVisible(false);
+            ordersButton.setVisible(false);
+        }
         // Tombol refresh
         refreshButton.setOnAction(event -> refreshCartView());
 
@@ -75,8 +88,10 @@ public class CartController implements MainLayoutController.MainLayoutAware {
 
     private void setupNavigationButtons() {
         profileButton.setOnAction(event -> navigateTo("/com/ecommerce/content/ProfileView.fxml"));
+        productsButton.setOnAction(event -> navigateTo("/com/ecommerce/content/seller/ManageProductsView.fxml"));
         ordersButton.setOnAction(event -> navigateTo("/com/ecommerce/content/seller/OrdersView.fxml"));
         cartButton.setOnAction(event -> navigateTo("/com/ecommerce/content/customer/CartView.fxml"));
+        checkoutButtonNav.setOnAction(event -> navigateTo("/com/ecommerce/content/customer/CheckoutView.fxml"));
     }
 
     private void navigateTo(String path) {
@@ -110,7 +125,8 @@ public class CartController implements MainLayoutController.MainLayoutAware {
                         cart_items.id AS cart_item_id,
                         products.name AS product_name,
                         cart_items.quantity AS quantity,
-                        products.price AS price
+                        products.price AS price,
+                        products.image_url as product_image
                     FROM 
                         cart_items
                     JOIN 
@@ -130,11 +146,12 @@ public class CartController implements MainLayoutController.MainLayoutAware {
                 String productName = resultSet.getString("product_name");
                 int quantity = resultSet.getInt("quantity");
                 double price = resultSet.getDouble("price");
+                String productImage = resultSet.getString("product_image");
 
                 totalPrice += price * quantity;
 
                 // Buat card untuk item cart secara manual
-                HBox card = createCartItemCard(cartItemId, productName, quantity, price);
+                HBox card = createCartItemCard(cartItemId, productName, quantity, price, productImage);
                 cartItemsContainer.getChildren().add(card);
             }
 
@@ -146,20 +163,35 @@ public class CartController implements MainLayoutController.MainLayoutAware {
         }
     }
 
-    private HBox createCartItemCard(int cartItemId, String productName, int quantity, double price) {
+    private HBox createCartItemCard(int cartItemId, String productName, int quantity, double price, String productImagePath) {
         HBox card = new HBox(10);
-        card.setStyle("-fx-border-color: lightgray; -fx-border-width: 1; -fx-border-radius: 10; -fx-padding: 10;");
+        card.setStyle("-fx-border-color: #D6D6D6; -fx-border-width: 1; -fx-border-radius: 10; "
+                + "-fx-padding: 10; -fx-background-color: #F9F9F9; -fx-alignment: center-left;");
+        card.setPrefWidth(1300);
 
-        // Nama produk
+        // Tambahkan gambar produk (Fixed size dengan rasio 2:3)
+        ImageView productImage = new ImageView(new Image(getClass().getResourceAsStream(productImagePath)));
+
+// Atur ukuran ImageView
+        productImage.setFitWidth(200); // Lebar tetap
+        productImage.setFitHeight(300); // Tinggi tetap
+        productImage.setPreserveRatio(false); // Nonaktifkan rasio agar bisa diubah sesuai area
+
+// Gunakan clip untuk memastikan gambar tidak keluar dari area
+        Rectangle clip = new Rectangle(200, 300); // Ukuran area yang sama dengan ImageView
+        productImage.setClip(clip);
+
+
+        // Nama produk (35% width)
         Label productNameLabel = new Label(productName);
         productNameLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+        productNameLabel.setPrefWidth(455);
 
-        // Harga total untuk item
-        Label priceLabel = new Label("Rp" + String.format("%,.0f", price * quantity));
-        priceLabel.setStyle("-fx-font-size: 14px;");
-
-        // Tombol untuk mengurangi jumlah
+        // Tombol untuk mengurangi jumlah (5% width)
         Button decreaseButton = new Button("-");
+        decreaseButton.setStyle("-fx-font-size: 14px; -fx-background-radius: 5; -fx-border-radius: 5; "
+                + "-fx-background-color: #F5F5F5; -fx-border-color: #C0C0C0; -fx-text-fill: #333333;");
+        decreaseButton.setPrefWidth(65);
         decreaseButton.setOnAction(e -> {
             if (quantity > 1) {
                 updateCartItemQuantity(cartItemId, quantity - 1);
@@ -170,27 +202,41 @@ public class CartController implements MainLayoutController.MainLayoutAware {
             }
         });
 
-        // Label jumlah
+        // Label jumlah (5% width)
         Label quantityLabel = new Label(String.valueOf(quantity));
+        quantityLabel.setStyle("-fx-font-size: 14px; -fx-alignment: center;");
+        quantityLabel.setPrefWidth(65);
 
-        // Tombol untuk menambah jumlah
+        // Tombol untuk menambah jumlah (5% width)
         Button increaseButton = new Button("+");
+        increaseButton.setStyle("-fx-font-size: 14px; -fx-background-radius: 5; -fx-border-radius: 5; "
+                + "-fx-background-color: #F5F5F5; -fx-border-color: #C0C0C0; -fx-text-fill: #333333;");
+        increaseButton.setPrefWidth(65);
         increaseButton.setOnAction(e -> {
             updateCartItemQuantity(cartItemId, quantity + 1);
             loadCartItems();
         });
 
-        // Tombol untuk menghapus item
+        // Harga total untuk item (30% width)
+        Label priceLabel = new Label("Rp" + String.format("%,.0f", price * quantity));
+        priceLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #333333;");
+        priceLabel.setPrefWidth(390);
+
+        // Tombol untuk menghapus item (15% width)
         Button removeButton = new Button("X");
-        removeButton.setStyle("-fx-text-fill: red;");
+        removeButton.setStyle("-fx-font-size: 14px; -fx-text-fill: #FFFFFF; "
+                + "-fx-background-radius: 10; -fx-background-color: #FF4D4D;"); // Solid color
+        removeButton.setPrefWidth(195);
         removeButton.setOnAction(e -> {
             removeCartItem(cartItemId);
             loadCartItems();
         });
 
-        card.getChildren().addAll(productNameLabel, decreaseButton, quantityLabel, increaseButton, priceLabel, removeButton);
+        // Tambahkan semua elemen ke dalam card
+        card.getChildren().addAll(productImage, productNameLabel, decreaseButton, quantityLabel, increaseButton, priceLabel, removeButton);
         return card;
     }
+
 
     private void updateCartItemQuantity(int cartItemId, int newQuantity) {
         try (Connection connection = DatabaseUtils.getConnection()) {
@@ -241,12 +287,12 @@ public class CartController implements MainLayoutController.MainLayoutAware {
 
             // Step 1: Hitung total harga dari cart
             String totalPriceQuery = """
-            SELECT SUM(ci.quantity * p.price) AS total_price
-            FROM cart_items ci
-            JOIN products p ON ci.product_id = p.id
-            JOIN cart_sellers cs ON ci.cart_seller_id = cs.id
-            WHERE cs.user_id = ?
-        """;
+                        SELECT SUM(ci.quantity * p.price) AS total_price
+                        FROM cart_items ci
+                        JOIN products p ON ci.product_id = p.id
+                        JOIN cart_sellers cs ON ci.cart_seller_id = cs.id
+                        WHERE cs.user_id = ?
+                    """;
             double totalPrice = 0.0;
 
             try (PreparedStatement stmt = connection.prepareStatement(totalPriceQuery)) {
@@ -264,9 +310,9 @@ public class CartController implements MainLayoutController.MainLayoutAware {
 
             // Step 2: Buat entri baru di tabel `orders`
             String insertOrderQuery = """
-            INSERT INTO orders (user_id, total_price, status)
-            VALUES (?, ?, 'PENDING')
-        """;
+                        INSERT INTO orders (user_id, total_price, status)
+                        VALUES (?, ?, 'PENDING')
+                    """;
             int orderId;
 
             try (PreparedStatement stmt = connection.prepareStatement(insertOrderQuery, PreparedStatement.RETURN_GENERATED_KEYS)) {
@@ -284,12 +330,12 @@ public class CartController implements MainLayoutController.MainLayoutAware {
 
             // Step 3: Pindahkan data dari `cart_sellers` ke `order_sellers`
             String selectCartSellersQuery = """
-            SELECT id, seller_id FROM cart_sellers WHERE user_id = ?
-        """;
+                        SELECT id, seller_id FROM cart_sellers WHERE user_id = ?
+                    """;
             String insertOrderSellerQuery = """
-            INSERT INTO order_sellers (order_id, seller_id, status)
-            VALUES (?, ?, 'PENDING')
-        """;
+                        INSERT INTO order_sellers (order_id, seller_id, status)
+                        VALUES (?, ?, 'PENDING')
+                    """;
 
             Map<Integer, Integer> cartSellerToOrderSellerMap = new HashMap<>();
 
@@ -317,15 +363,15 @@ public class CartController implements MainLayoutController.MainLayoutAware {
 
             // Step 4: Pindahkan data dari `cart_items` ke `order_items`
             String selectCartItemsQuery = """
-            SELECT ci.cart_seller_id, ci.product_id, ci.quantity, p.price
-            FROM cart_items ci
-            JOIN products p ON ci.product_id = p.id
-            WHERE ci.cart_seller_id IN (?)
-        """;
+                        SELECT ci.cart_seller_id, ci.product_id, ci.quantity, p.price
+                        FROM cart_items ci
+                        JOIN products p ON ci.product_id = p.id
+                        WHERE ci.cart_seller_id IN (?)
+                    """;
             String insertOrderItemQuery = """
-            INSERT INTO order_items (order_seller_id, product_id, quantity, price)
-            VALUES (?, ?, ?, ?)
-        """;
+                        INSERT INTO order_items (order_seller_id, product_id, quantity, price)
+                        VALUES (?, ?, ?, ?)
+                    """;
 
             try (PreparedStatement selectStmt = connection.prepareStatement(selectCartItemsQuery);
                  PreparedStatement insertStmt = connection.prepareStatement(insertOrderItemQuery)) {

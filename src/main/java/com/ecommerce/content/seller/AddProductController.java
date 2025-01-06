@@ -1,12 +1,12 @@
 package com.ecommerce.content.seller;
 
 import com.ecommerce.App;
-import com.ecommerce.dao.CategoryDAO;
-import com.ecommerce.dao.impl.CategoryDAOImpl;
+import com.ecommerce.db.dao.CategoryDAO;
+import com.ecommerce.db.dao.impl.CategoryDAOImpl;
 import com.ecommerce.layouts.MainLayoutController;
 import com.ecommerce.layouts.NavbarController;
-import com.ecommerce.models.Category;
-import com.ecommerce.utils.DatabaseUtils;
+import com.ecommerce.db.models.Category;
+import com.ecommerce.db.DatabaseUtils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -36,6 +36,10 @@ public class AddProductController implements MainLayoutController.MainLayoutAwar
 
     @FXML
     private Button ordersButton;
+    @FXML
+    private Button checkoutButton;
+    @FXML
+    private Button cartButton;
 
     @FXML
     private Button uploadButton;
@@ -92,6 +96,8 @@ public class AddProductController implements MainLayoutController.MainLayoutAwar
         profileButton.setOnAction(event -> navigateTo("/com/ecommerce/content/ProfileView.fxml"));
         productsButton.setOnAction(event -> navigateTo("/com/ecommerce/content/seller/ManageProductsView.fxml"));
         ordersButton.setOnAction(event -> navigateTo("/com/ecommerce/content/seller/OrdersView.fxml"));
+        cartButton.setOnAction(event -> navigateTo("/com/ecommerce/content/customer/CartView.fxml"));
+        checkoutButton.setOnAction(event -> navigateTo("/com/ecommerce/content/customer/CheckoutView.fxml"));
     }
 
     private void navigateTo(String path) {
@@ -192,6 +198,7 @@ public class AddProductController implements MainLayoutController.MainLayoutAwar
         // Navigate back to the Manage Products view
         navigateTo("/com/ecommerce/content/seller/ManageProductsView.fxml");
     }
+
     private String saveImage(File imageFile) throws Exception {
         String targetDirectory = "src/main/resources/images/products/";
         String targetFileName = imageFile.getName();
@@ -219,12 +226,13 @@ public class AddProductController implements MainLayoutController.MainLayoutAwar
             }
         }
     }
+
     private void saveProductToDatabase(Connection connection, String name, String description,
                                        String price, String stock, int categoryId, String imageUrl) throws Exception {
         String sql = """
-        INSERT INTO products (name, description, price, stock, seller_id, category_id, image_url, created_at, updated_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
-        """;
+                INSERT INTO products (name, description, price, stock, seller_id, category_id, image_url, created_at, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+                """;
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, name);

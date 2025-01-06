@@ -9,7 +9,7 @@
     <ScrollPane fitToWidth="true" fitToHeight="true">
         <content>
             <VBox spacing="10" prefWidth="1440.0">
-                <fx:include source="../product/ProductListView.fxml"/>
+                <fx:include source="product/ProductListView.fxml"/>
             </VBox>
         </content>
     </ScrollPane>

@@ -2,7 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
@@ -17,55 +16,58 @@
         <VBox alignment="TOP_CENTER" spacing="20.0" style="-fx-padding: 40; -fx-background-color: white;" StackPane.alignment="CENTER">
 
             <!-- Navigation Bar -->
-            <HBox alignment="CENTER_LEFT" style="-fx-padding: 10px;">
-                <Button fx:id="cartButton" text="Cart" style="-fx-background-color: white; -fx-text-fill: #31D0AA; -fx-border-color: #31D0AA; -fx-border-width: 2; -fx-background-radius: 25; -fx-font-weight: 900;">
-                    <padding>
-                        <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
-                    </padding>
+            <HBox alignment="CENTER_LEFT" spacing="20.0">
+                <Button fx:id="profileButton" style="-fx-border-radius: 25; -fx-background-radius: 25; -fx-font-weight: 900; -fx-background-color: #F5F5F5; -fx-border-color: #C0C0C0; -fx-text-fill: #4A4A4A;" text="Profile">
                     <font>
                         <Font name="System Bold" size="16.0" />
                     </font>
+                    <padding>
+                        <Insets bottom="5.0" left="25.0" right="25.0" top="5.0" />
+                    </padding>
                 </Button>
-                <Button fx:id="checkoutButton" text="Checkout" style="-fx-background-color: white; -fx-text-fill: #31D0AA; -fx-border-color: #31D0AA; -fx-border-width: 2; -fx-background-radius: 25; -fx-font-weight: 900;">
-                    <padding>
-                        <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
-                    </padding>
+                <Button fx:id="cartButton" style="-fx-border-radius: 25; -fx-background-radius: 25; -fx-font-weight: 900; -fx-background-color: #F5F5F5; -fx-border-color: #C0C0C0; -fx-text-fill: #4A4A4A;" text="Cart">
                     <font>
                         <Font name="System Bold" size="16.0" />
                     </font>
+                    <padding>
+                        <Insets bottom="5.0" left="25.0" right="25.0" top="5.0" />
+                    </padding>
                 </Button>
-                <Button fx:id="profileButton" style="-fx-background-color: white; -fx-text-fill: #31D0AA; -fx-border-color: #31D0AA; -fx-border-width: 2; -fx-border-radius: 25 0 0 25; -fx-background-radius: 25 0 0 25; -fx-font-weight: 900;" text="Profile">
+                <Button fx:id="checkoutButton" style="-fx-border-radius: 25; -fx-background-radius: 25; -fx-font-weight: 900; -fx-background-color: #F5F5F5; -fx-border-color: #C0C0C0; -fx-text-fill: #4A4A4A;" text="Checkout">
                     <font>
                         <Font name="System Bold" size="16.0" />
                     </font>
                     <padding>
-                        <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
-                    </padding></Button>
-                <Button fx:id="productsButton" style="-fx-background-color: white; -fx-text-fill: #31D0AA; -fx-border-color: #31D0AA; -fx-background-radius: 0 0 0 0; -fx-border-radius: 0 0 0 0; -fx-border-width: 2 0 2 0; -fx-font-weight: 900;" text="Products">
-                    <padding>
-                        <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
+                        <Insets bottom="5.0" left="25.0" right="25.0" top="5.0" />
                     </padding>
+                </Button>
+                <Button fx:id="productsButton" style="-fx-border-radius: 25; -fx-background-radius: 25; -fx-font-weight: 900; -fx-background-color: #F5F5F5; -fx-border-color: #C0C0C0; -fx-text-fill: #4A4A4A;" text="Products">
                     <font>
                         <Font name="System Bold" size="16.0" />
-                    </font></Button>
-
-
-                <Button fx:id="ordersButton" style="-fx-background-color: white; -fx-text-fill: #31D0AA; -fx-border-color: #31D0AA; -fx-border-width: 2; -fx-background-radius: 0 25 25 0; -fx-border-radius: 0 25 25 0; -fx-font-weight: 900;" text="Orders">
+                    </font>
                     <padding>
-                        <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
+                        <Insets bottom="5.0" left="25.0" right="25.0" top="5.0" />
                     </padding>
+                </Button>
+                <Button fx:id="ordersButton" style="-fx-border-radius: 25; -fx-background-radius: 25; -fx-font-weight: 900; -fx-background-color: #F5F5F5; -fx-border-color: #C0C0C0; -fx-text-fill: #4A4A4A;" text="Orders">
                     <font>
                         <Font name="System Bold" size="16.0" />
-                    </font></Button>
+                    </font>
+                    <padding>
+                        <Insets bottom="5.0" left="25.0" right="25.0" top="5.0" />
+                    </padding>
+                </Button>
             </HBox>
 
+
             <!-- Profile Section -->
-            <VBox alignment="CENTER_LEFT" spacing="20.0" style="-fx-padding: 20; -fx-background-color: #FFFFFF; -fx-border-width: 1;">
+            <VBox alignment="CENTER_LEFT" spacing="20.0" style="-fx-background-color: #FFFFFF; -fx-border-width: 1;">
                 <!-- Title -->
                 <Text style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Edit Profile">
                     <font>
                         <Font name="System Bold" size="16.0" />
-                    </font></Text>
+                    </font>
+                </Text>
 
                 <!-- Form -->
                 <VBox alignment="CENTER_LEFT" spacing="15.0">
@@ -124,18 +126,18 @@
                     <!-- Role Display -->
                     <VBox spacing="5.0">
                         <Label text="Role:" />
-                        <Label fx:id="roleLabel" text="CUSTOMER" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
+                        <Label fx:id="roleLabel" style="-fx-font-size: 14px; -fx-font-weight: bold;" text="CUSTOMER" />
                     </VBox>
 
                     <!-- Seller Request Section -->
-                    <VBox spacing="5.0" fx:id="sellerRequestContainer" visible="false">
-                        <HBox fx:id="customerStatus" spacing="10.0" alignment="CENTER_LEFT" visible="false">
-                            <Label text="Seller Request Status:" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
-                            <Label fx:id="sellerRequestStatusLabel" text="PENDING" style="-fx-font-size: 14px;" />
+                    <VBox fx:id="sellerRequestContainer" spacing="5.0" visible="false">
+                        <HBox fx:id="customerStatus" alignment="CENTER_LEFT" spacing="10.0" visible="false">
+                            <Label style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Seller Request Status:" />
+                            <Label fx:id="sellerRequestStatusLabel" style="-fx-font-size: 14px;" text="PENDING" />
                         </HBox>
-                        <HBox fx:id="noneStatus" spacing="10.0" alignment="CENTER_LEFT" visible="false">
-                            <Label text="Seller Request:" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
-                            <Button fx:id="requestSellerButton" text="Request Seller" style="-fx-background-color: #31D0AA; -fx-text-fill: white; -fx-background-radius: 25;">
+                        <HBox fx:id="noneStatus" alignment="CENTER_LEFT" spacing="10.0" visible="false">
+                            <Label style="-fx-font-size: 14px; -fx-font-weight: bold;" text="Seller Request:" />
+                            <Button fx:id="requestSellerButton" style="-fx-background-color: #31D0AA; -fx-text-fill: white; -fx-background-radius: 25;" text="Request Seller">
                                 <font>
                                     <Font size="16.0" />
                                 </font>
@@ -144,7 +146,7 @@
                     </VBox>
 
                     <!-- Save Button -->
-                    <Button fx:id="saveButton" prefHeight="48.0" prefWidth="800.0" style="-fx-background-color: #31D0AA; -fx-text-fill: white; -fx-background-radius: 25; -fx-font-weight: bold;" text="Save Changes">
+                    <Button fx:id="saveButton" prefHeight="48.0" prefWidth="206.0" style="-fx-background-color: #31D0AA; -fx-text-fill: white; -fx-background-radius: 25; -fx-font-weight: bold;" text="Save Changes">
                         <font>
                             <Font size="16.0" />
                         </font>

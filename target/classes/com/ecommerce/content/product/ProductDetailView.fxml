@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<StackPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ecommerce.content.product.ProductDetailViewController">
+    <children>
+        <HBox prefWidth="1440.0" spacing="20" style="-fx-padding: 20;">
+         <HBox maxHeight="460.0" prefHeight="460.0" prefWidth="0.0" style="-fx-border-color: #d1d5db; -fx-border-width: 1;" HBox.hgrow="NEVER">
+            <children>
+                  <!-- Product Image -->
+                  <ImageView fx:id="productImageView" fitHeight="460.0" fitWidth="460.0" pickOnBounds="true" preserveRatio="true" />
+            </children>
+         </HBox>
+         <VBox prefWidth="940.0" spacing="20.0">
+            <children>
+      
+                  <!-- Product Details -->
+                  <VBox prefHeight="400.0" prefWidth="945.0" spacing="20.0" style="-fx-padding: 20; -fx-border-color: #d1d5db; -fx-border-radius: 20; -fx-background-radius: 20; -fx-background-color: #f9fafb;">
+                      <children>
+                          <Text fx:id="productNameLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Nama Produk">
+                              <font>
+                                  <Font name="System Bold" size="24.0" />
+                              </font>
+                          </Text>
+                          <Text fx:id="productPriceLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Rp 0">
+                              <font>
+                                  <Font name="System Bold" size="32.0" />
+                              </font>
+                          </Text>
+                          <Text fx:id="productDescriptionLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Deskripsi Produk" wrappingWidth="566.0">
+                              <font>
+                                  <Font size="16.0" />
+                              </font>
+                          </Text>
+                      </children>
+                  </VBox>
+      
+                  <!-- Quantity and Buttons -->
+                  <VBox prefHeight="150.0" prefWidth="229.0" spacing="20.0" style="-fx-background-color: #f9fafb; -fx-background-radius: 15; -fx-padding: 20; -fx-border-color: #d1d5db; -fx-border-width: 1; -fx-border-radius: 15;" HBox.hgrow="NEVER">
+                      <children>
+                          <HBox alignment="CENTER_LEFT" spacing="20.0">
+                              <children>
+                                  <TextField fx:id="quantityField" alignment="CENTER" prefHeight="37.0" prefWidth="81.0" style="-fx-border-radius: 100; -fx-background-radius: 100; -fx-border-color: #9ca3af; -fx-border-width: 1;" text="1">
+                                      <font>
+                                          <Font size="16.0" />
+                                      </font>
+                                  </TextField>
+                                  <Text text="Stock Total:" />
+                                  <Text fx:id="productStockLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                      <font>
+                                          <Font name="System Bold" size="16.0" />
+                                      </font>
+                                  </Text>
+                              </children>
+                          </HBox>
+                          <HBox alignment="CENTER_LEFT" spacing="10.0">
+                              <children>
+                                  <!-- Buy Now Button -->
+                                  <Button fx:id="buyNowButton" onAction="#handleBuyNow" mnemonicParsing="false" prefHeight="30.0" prefWidth="122.0" style="-fx-background-color: white; -fx-font-weight: 900; -fx-border-color: #31D0AA; -fx-border-width: 2; -fx-border-radius: 30; -fx-text-fill: #31D0AA; -fx-font-size: 16; -fx-background-radius: 30;" text="Buy Now" />
+      
+                                  <!-- Add to Cart Button -->
+                                  <Button fx:id="addToCartButton" mnemonicParsing="false" onAction="#handleAddToCart" prefHeight="30.0" prefWidth="124.0" style="-fx-background-color: #31D0AA; -fx-font-weight: 900; -fx-text-fill: white; -fx-font-size: 16; -fx-background-radius: 30;" text="Add to Cart" />
+                              </children>
+                          </HBox>
+                      </children>
+                  </VBox>
+            </children>
+         </VBox>
+        </HBox>
+    </children>
+</StackPane>

@@ -2,12 +2,12 @@ package com.ecommerce.content.seller;
 
 import com.ecommerce.App;
 import com.ecommerce.components.AdminProductCard;
-import com.ecommerce.dao.ProductDAO;
-import com.ecommerce.dao.impl.ProductDAOImpl;
+import com.ecommerce.db.dao.ProductDAO;
+import com.ecommerce.db.dao.impl.ProductDAOImpl;
 import com.ecommerce.layouts.MainLayoutController;
 import com.ecommerce.layouts.NavbarController;
-import com.ecommerce.models.Product;
-import com.ecommerce.utils.DatabaseUtils;
+import com.ecommerce.db.models.Product;
+import com.ecommerce.db.DatabaseUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -23,6 +23,10 @@ public class ManageProductsController implements MainLayoutController.MainLayout
     private VBox productContainer;
     @FXML
     private Button profileButton;
+    @FXML
+    private Button checkoutButton;
+    @FXML
+    private Button cartButton;
 
     @FXML
     private Button productsButton;
@@ -49,6 +53,8 @@ public class ManageProductsController implements MainLayoutController.MainLayout
         profileButton.setOnAction(event -> navigateTo("/com/ecommerce/content/ProfileView.fxml"));
         productsButton.setOnAction(event -> navigateTo("/com/ecommerce/content/seller/ManageProductsView.fxml"));
         ordersButton.setOnAction(event -> navigateTo("/com/ecommerce/content/seller/OrdersView.fxml"));
+        cartButton.setOnAction(event -> navigateTo("/com/ecommerce/content/customer/CartView.fxml"));
+        checkoutButton.setOnAction(event -> navigateTo("/com/ecommerce/content/customer/CheckoutView.fxml"));
     }
 
     private void navigateTo(String path) {

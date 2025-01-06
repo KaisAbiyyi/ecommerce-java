@@ -2,13 +2,10 @@ package com.ecommerce.components;
 
 import com.ecommerce.App;
 import com.ecommerce.content.seller.EditProductController;
-import com.ecommerce.dao.ProductDAO;
-import com.ecommerce.dao.impl.ProductDAOImpl;
-import com.ecommerce.layouts.MainLayoutController;
+import com.ecommerce.db.dao.ProductDAO;
+import com.ecommerce.db.dao.impl.ProductDAOImpl;
 import com.ecommerce.layouts.NavbarController;
-import com.ecommerce.utils.DatabaseUtils;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
+import com.ecommerce.db.DatabaseUtils;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -16,10 +13,8 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.util.Map;
 import java.util.Optional;

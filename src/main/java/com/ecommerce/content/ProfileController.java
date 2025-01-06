@@ -3,8 +3,8 @@ package com.ecommerce.content;
 import com.ecommerce.App; // Pastikan App memiliki loggedInUser
 import com.ecommerce.layouts.MainLayoutController;
 import com.ecommerce.layouts.NavbarController;
-import com.ecommerce.models.User;
-import com.ecommerce.utils.DatabaseUtils;
+import com.ecommerce.db.models.User;
+import com.ecommerce.db.DatabaseUtils;
 import com.ecommerce.utils.PasswordUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -81,10 +81,6 @@ public class ProfileController implements MainLayoutController.MainLayoutAware {
             return;
         }
 
-        cartButton.setOnAction(event -> navigateToCart());
-
-        checkoutButton.setOnAction(event -> navigateToCheckout());
-
         // Isi data awal pengguna
         fetchLoggedInUser();
 
@@ -93,12 +89,12 @@ public class ProfileController implements MainLayoutController.MainLayoutAware {
         setupPasswordFieldListener();
         setupNavigationButtons();
 
-        // Hide navigation buttons if the user is not a seller
-        if (!"SELLER".equals(loggedInUser.getRole())) {
-            profileButton.setVisible(false);
+        if(!("SELLER".equalsIgnoreCase(loggedInUser.getRole().name()))){
             productsButton.setVisible(false);
             ordersButton.setVisible(false);
         }
+
+        // Hide navigation buttons if the user is not a seller
 
         // Event handlers
         requestSellerButton.setOnAction(event -> handleRequestSeller());
@@ -140,6 +136,8 @@ public class ProfileController implements MainLayoutController.MainLayoutAware {
         profileButton.setOnAction(event -> navigateTo("/com/ecommerce/content/ProfileView.fxml"));
         productsButton.setOnAction(event -> navigateTo("/com/ecommerce/content/seller/ManageProductsView.fxml"));
         ordersButton.setOnAction(event -> navigateTo("/com/ecommerce/content/seller/OrdersView.fxml"));
+        cartButton.setOnAction(event->navigateTo("/com/ecommerce/content/customer/CartView.fxml"));
+        checkoutButton.setOnAction(event->navigateTo("/com/ecommerce/content/customer/CheckoutView.fxml"));
     }
 
     private void navigateTo(String path) {
@@ -301,60 +299,6 @@ public class ProfileController implements MainLayoutController.MainLayoutAware {
                     System.err.println("[WARN] No changes were made to the user data.");
                 }
             }
-        }
-    }
-
-    @FXML
-    private void navigateToCart() {
-        System.out.println("[INFO] Navigasi ke halaman CartView ditekan.");
-
-        if (App.loggedInUser == null) {
-            System.err.println("[ERROR] Tidak ada pengguna yang sedang login. Tidak dapat melanjutkan.");
-            return;
-        }
-
-        try {
-            String cartViewPath = "/com/ecommerce/content/customer/CartView.fxml";
-
-            // Tambahkan halaman ke stack navigasi
-            NavbarController navbarController = App.mainLayoutController.getNavbarController();
-            if (navbarController != null) {
-                navbarController.addPageToStack(cartViewPath, Map.of());
-            }
-
-            // Muat halaman CartView
-            App.mainLayoutController.loadContent(cartViewPath);
-            System.out.println("[INFO] Navigasi ke halaman CartView berhasil.");
-        } catch (Exception e) {
-            System.err.println("[ERROR] Gagal navigasi ke halaman CartView:");
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void navigateToCheckout() {
-        System.out.println("[INFO] Navigasi ke halaman CheckoutView ditekan.");
-
-        if (App.loggedInUser == null) {
-            System.err.println("[ERROR] Tidak ada pengguna yang sedang login. Tidak dapat melanjutkan.");
-            return;
-        }
-
-        try {
-            String Checkoutpath = "/com/ecommerce/content/customer/CheckoutView.fxml";
-
-            // Tambahkan halaman ke stack navigasi
-            NavbarController navbarController = App.mainLayoutController.getNavbarController();
-            if (navbarController != null) {
-                navbarController.addPageToStack(Checkoutpath, Map.of());
-            }
-
-            // Muat halaman CheckoutView
-            App.mainLayoutController.loadContent(Checkoutpath);
-            System.out.println("[INFO] Navigasi ke halaman CheckoutView berhasil.");
-        } catch (Exception e) {
-            System.err.println("[ERROR] Gagal navigasi ke halaman CheckoutView:");
-            e.printStackTrace();
         }
     }
 

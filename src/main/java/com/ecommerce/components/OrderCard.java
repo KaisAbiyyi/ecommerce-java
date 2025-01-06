@@ -1,7 +1,7 @@
 package com.ecommerce.components;
 
 import com.ecommerce.App;
-import com.ecommerce.utils.DatabaseUtils;
+import com.ecommerce.db.DatabaseUtils;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;

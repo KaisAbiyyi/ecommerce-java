@@ -1,8 +1,7 @@
 package com.ecommerce.components;
 
 import com.ecommerce.App;
-import com.ecommerce.content.ProductDetailViewController;
-import com.ecommerce.layouts.MainLayoutController;
+import com.ecommerce.content.product.ProductDetailViewController;
 import com.ecommerce.layouts.NavbarController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -13,6 +12,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
+import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.Map;
 
 public class ProductCard extends VBox {
@@ -41,13 +42,16 @@ public class ProductCard extends VBox {
         this.getChildren().add(productNameText);
 
         // Add product price
-        Text productPriceText = new Text("Rp" + String.format("%,.0f", productPrice));
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
+        String formattedPrice = currencyFormat.format(productPrice);
+        Text productPriceText = new Text(formattedPrice);
         productPriceText.setStyle("-fx-font-size: 14px; -fx-text-fill: #666;");
         this.getChildren().add(productPriceText);
 
         // Add click event for navigation
         this.setOnMouseClicked(this::handleClick);
     }
+
 
     private ImageView createImageView(String imageUrl) {
         Image image;
@@ -94,13 +98,13 @@ public class ProductCard extends VBox {
                 NavbarController navbarController = App.mainLayoutController.getNavbarController();
                 if (navbarController != null) {
                     navbarController.addPageToStack(
-                            "/com/ecommerce/content/ProductDetailView.fxml",
+                            "/com/ecommerce/content/product/ProductDetailView.fxml",
                             Map.of("productId", productId)
                     );
                 }
 
                 // Load product detail view
-                App.mainLayoutController.loadContent("/com/ecommerce/content/ProductDetailView.fxml");
+                App.mainLayoutController.loadContent("/com/ecommerce/content/product/ProductDetailView.fxml");
 
                 // Pass product ID to the ProductDetailViewController
                 ProductDetailViewController controller =

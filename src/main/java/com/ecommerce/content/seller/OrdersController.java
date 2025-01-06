@@ -4,7 +4,7 @@ import com.ecommerce.App;
 import com.ecommerce.components.OrderCard;
 import com.ecommerce.layouts.MainLayoutController;
 import com.ecommerce.layouts.NavbarController;
-import com.ecommerce.utils.DatabaseUtils;
+import com.ecommerce.db.DatabaseUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
@@ -25,6 +25,10 @@ public class OrdersController implements MainLayoutController.MainLayoutAware {
 
     @FXML
     private Button profileButton;
+    @FXML
+    private Button cartButton;
+    @FXML
+    private Button checkoutButton;
 
     @FXML
     private Button productsButton;
@@ -77,6 +81,8 @@ public class OrdersController implements MainLayoutController.MainLayoutAware {
         profileButton.setOnAction(event -> navigateTo("/com/ecommerce/content/ProfileView.fxml"));
         productsButton.setOnAction(event -> navigateTo("/com/ecommerce/content/seller/ManageProductsView.fxml"));
         ordersButton.setOnAction(event -> navigateTo("/com/ecommerce/content/seller/OrdersView.fxml"));
+        cartButton.setOnAction(event -> navigateTo("/com/ecommerce/content/customer/CartView.fxml"));
+        checkoutButton.setOnAction(event -> navigateTo("/com/ecommerce/content/customer/CheckoutView.fxml"));
     }
 
     private void navigateTo(String path) {

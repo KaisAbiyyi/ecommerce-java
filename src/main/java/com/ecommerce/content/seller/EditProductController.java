@@ -3,7 +3,7 @@ package com.ecommerce.content.seller;
 import com.ecommerce.App;
 import com.ecommerce.layouts.MainLayoutController;
 import com.ecommerce.layouts.NavbarController;
-import com.ecommerce.utils.DatabaseUtils;
+import com.ecommerce.db.DatabaseUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -36,6 +36,10 @@ public class EditProductController implements MainLayoutController.MainLayoutAwa
 
     @FXML
     private Button ordersButton;
+    @FXML
+    private Button cartButton;
+    @FXML
+    private Button checkoutButton;
 
     @FXML
     private ImageView productImageView;
@@ -91,6 +95,8 @@ public class EditProductController implements MainLayoutController.MainLayoutAwa
         profileButton.setOnAction(event -> navigateTo("/com/ecommerce/content/ProfileView.fxml"));
         productsButton.setOnAction(event -> navigateTo("/com/ecommerce/content/seller/ManageProductsView.fxml"));
         ordersButton.setOnAction(event -> navigateTo("/com/ecommerce/content/seller/OrdersView.fxml"));
+        cartButton.setOnAction(event -> navigateTo("/com/ecommerce/content/customer/CartView.fxml"));
+        checkoutButton.setOnAction(event -> navigateTo("/com/ecommerce/content/customer/CheckoutView.fxml"));
     }
 
     private void navigateTo(String path) {

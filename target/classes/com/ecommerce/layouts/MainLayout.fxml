@@ -15,7 +15,7 @@
             <fx:include source="Navbar.fxml" fx:id="navbar"/>
 
             <!-- Konten dinamis -->
-            <StackPane fx:id="contentPane" prefHeight="800.0" prefWidth="1440.0"/>
+            <StackPane fx:id="contentPane" prefHeight="949.0" prefWidth="1440.0"/>
         </VBox>
     </children>
 </AnchorPane>
